@@ -16,7 +16,7 @@ Everything runs in **us-east-1** (required for CloudFront's ACM certificate). Th
   ```
   If this fails, sign in first (e.g. `aws login` or your usual `aws configure` / SSO flow).
 - Node.js 20+.
-- The domain `aitecxo.com` (registered/managed at Google).
+- The domain `aitecxo.com` (registered at **Network Solutions**).
 
 ## 1. Install dependencies
 
@@ -40,7 +40,7 @@ Deploy just the DNS stack, then read its nameservers:
 npx cdk deploy AitecxoDnsStack
 ```
 
-Copy the four servers from the `HostedZoneNameServers` output. **In the Google domain settings for `aitecxo.com`, replace the custom nameservers with these Route 53 values.** This delegates DNS to Route 53 and is what lets ACM validate the certificate.
+Copy the four servers from the `HostedZoneNameServers` output. **In Network Solutions' nameserver settings for `aitecxo.com`, set custom nameservers to these Route 53 values** (replacing the `worldnic.com` entries). This delegates DNS to Route 53 and is what lets ACM validate the certificate.
 
 Verify delegation has propagated (can take minutes to a few hours):
 
@@ -50,7 +50,7 @@ dig +short NS aitecxo.com
 
 You should see the Route 53 nameservers.
 
-> Alternative (no delegation): keep DNS at Google and instead add the ACM validation `CNAME` records and a `CNAME`/ALIAS to CloudFront manually at Google. Delegation is simpler and enables apex ALIAS records, so it is the recommended path.
+> Alternative (no delegation): keep DNS at Network Solutions and instead add the ACM validation `CNAME` records and a `CNAME`/ALIAS to CloudFront there. Delegation is simpler and enables apex ALIAS records, so it is the recommended path.
 
 ## 4. Deploy hosting
 
