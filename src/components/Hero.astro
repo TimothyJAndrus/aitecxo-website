@@ -1,0 +1,37 @@
+---
+import { SITE } from '../config';
+---
+
+<section class="relative overflow-hidden bg-linear-to-b from-brand-50 via-white to-white">
+  <div
+    class="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-accent-400/20 blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="mx-auto max-w-6xl px-4 py-20 md:py-28">
+    <p class="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-3 py-1 text-sm font-medium text-brand-700">
+      <span class="h-2 w-2 rounded-full bg-accent-500"></span>
+      AI consulting for SMB &amp; enterprise
+    </p>
+    <h1 class="mt-6 max-w-3xl text-4xl font-bold tracking-tight text-ink-900 md:text-6xl">
+      Innovate, implement, and integrate <span class="text-brand-700">AI</span> — without the guesswork.
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-ink-500 md:text-xl">
+      {SITE.name} partners with your team to turn AI from hype into measurable business outcomes — from strategy and roadmaps to production-ready systems in your own cloud.
+    </p>
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a
+        href="/contact"
+        class="inline-flex items-center justify-center rounded-lg bg-brand-700 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-brand-800"
+      >
+        Book a discovery call
+      </a>
+      <a
+        href="/services"
+        class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-ink-700 transition-colors hover:border-brand-300 hover:text-brand-700"
+      >
+        Explore services
+      </a>
+    </div>
+  </div>
+</section>

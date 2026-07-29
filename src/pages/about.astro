@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CTA from '../components/CTA.astro';
+
+const values = [
+  { title: 'Outcomes over hype', text: 'We start from your business goals and work backward to the simplest AI that delivers them.' },
+  { title: 'Build in your cloud', text: 'Solutions run in your own AWS account with security, cost, and ownership in mind — no lock-in.' },
+  { title: 'Transparent & measurable', text: 'Every solution ships with evaluation and monitoring so you can trust what it does.' },
+  { title: 'Enable your team', text: 'We transfer knowledge as we go, so your people can own and extend what we build.' },
+];
+---
+
+<BaseLayout
+  title="About"
+  description="AITeCXO is an AI consulting practice helping SMB and enterprise teams adopt AI pragmatically."
+>
+  <PageHeader
+    eyebrow="About"
+    title="A practical partner for AI adoption"
+    intro="AITeCXO helps organizations move past AI hype and into measurable results — combining hands-on engineering with senior technology leadership."
+  />
+
+  <div class="mx-auto max-w-3xl px-4 py-16 md:py-24">
+    <div class="prose">
+      <p>
+        AITeCXO is an AI consulting practice for SMB and enterprise teams that want to
+        innovate, implement, and integrate AI into how they actually work. We bring the
+        perspective of a hands-on engineer and the judgment of a technology executive to
+        every engagement.
+      </p>
+      <h2>Who we work with</h2>
+      <p>
+        We partner with leaders who are accountable for outcomes — founders, operators, and
+        technology executives — who want a trusted guide rather than a slide deck. Engagements
+        range from a focused discovery sprint to standing up production AI systems.
+      </p>
+      <h2>How we're different</h2>
+      <p>
+        Deep cloud and software engineering experience means we don't just advise — we build,
+        integrate, and hand over solutions your team can own. We're cloud-native by default,
+        with a bias toward secure, cost-aware architectures on AWS.
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-6 sm:grid-cols-2">
+      {
+        values.map((v) => (
+          <div class="rounded-2xl border border-slate-200 bg-white p-6">
+            <h3 class="text-lg font-semibold text-ink-900">{v.title}</h3>
+            <p class="mt-2 text-ink-500">{v.text}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="pb-16 md:pb-24">
+    <CTA />
+  </div>
+</BaseLayout>

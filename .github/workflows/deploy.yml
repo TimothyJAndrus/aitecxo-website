@@ -1,0 +1,69 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Only one production deploy at a time.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+# Required for AWS OIDC federation (no long-lived access keys).
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            infra/package-lock.json
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install site dependencies
+        run: npm ci
+
+      - name: Install infra dependencies
+        run: npm ci
+        working-directory: infra
+
+      - name: Deploy infrastructure
+        working-directory: infra
+        run: npx cdk deploy --all --require-approval never --outputs-file cdk-outputs.json
+
+      - name: Read stack outputs
+        id: outputs
+        working-directory: infra
+        run: |
+          echo "bucket=$(jq -r '.AitecxoSiteStack.BucketName' cdk-outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "distribution=$(jq -r '.AitecxoSiteStack.DistributionId' cdk-outputs.json)" >> "$GITHUB_OUTPUT"
+          echo "api=$(jq -r '.AitecxoContactApiStack.ContactApiUrl' cdk-outputs.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Build site
+        env:
+          PUBLIC_CONTACT_API_URL: ${{ steps.outputs.outputs.api }}
+        run: npm run build
+
+      - name: Publish to S3
+        run: aws s3 sync dist "s3://${{ steps.outputs.outputs.bucket }}" --delete
+
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id "${{ steps.outputs.outputs.distribution }}" --paths "/*"

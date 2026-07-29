@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# Astro build output & generated types
+dist/
+.astro/
+
+# CDK
+infra/node_modules/
+infra/cdk.out/
+infra/cdk-outputs.json
+
+# environment
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db

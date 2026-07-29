@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { NAV } from '../config';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <section class="mx-auto flex max-w-3xl flex-col items-center px-4 py-24 text-center md:py-32">
+    <p class="text-sm font-bold uppercase tracking-wide text-accent-600">404</p>
+    <h1 class="mt-2 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
+      This page went off-script
+    </h1>
+    <p class="mt-4 max-w-xl text-lg text-ink-500">
+      The page you’re looking for doesn’t exist or may have moved. Let’s get you back on track.
+    </p>
+    <a
+      href="/"
+      class="mt-8 inline-flex items-center justify-center rounded-lg bg-brand-700 px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-brand-800"
+    >
+      Back to home
+    </a>
+    <nav class="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2" aria-label="Helpful links">
+      {
+        NAV.map((item) => (
+          <a class="text-sm font-medium text-ink-500 hover:text-brand-700" href={item.href}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </section>
+</BaseLayout>

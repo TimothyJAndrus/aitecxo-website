@@ -1,0 +1,78 @@
+---
+import { SITE, NAV, SOCIAL, SERVICES } from '../config';
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-slate-200 bg-slate-50">
+  <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-4 py-12 md:grid-cols-4">
+    <div class="col-span-2 md:col-span-1">
+      <p class="text-lg font-bold text-ink-900">{SITE.name}</p>
+      <p class="mt-2 max-w-xs text-sm text-ink-500">{SITE.tagline}</p>
+      <p class="mt-4 text-sm text-ink-500">{SITE.location}</p>
+    </div>
+
+    <div>
+      <p class="text-sm font-semibold text-ink-900">Explore</p>
+      <ul class="mt-3 space-y-2">
+        {
+          NAV.map((item) => (
+            <li>
+              <a class="text-sm text-ink-500 hover:text-brand-700" href={item.href}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <p class="text-sm font-semibold text-ink-900">Services</p>
+      <ul class="mt-3 space-y-2">
+        {
+          SERVICES.map((s) => (
+            <li>
+              <a class="text-sm text-ink-500 hover:text-brand-700" href={`/services#${s.id}`}>
+                {s.title}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <p class="text-sm font-semibold text-ink-900">Connect</p>
+      <ul class="mt-3 space-y-2">
+        <li>
+          <a class="text-sm text-ink-500 hover:text-brand-700" href={`mailto:${SITE.email}`}>
+            {SITE.email}
+          </a>
+        </li>
+        {
+          SOCIAL.map((s) => (
+            <li>
+              <a
+                class="text-sm text-ink-500 hover:text-brand-700"
+                href={s.href}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {s.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-slate-200">
+    <div
+      class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-ink-500 sm:flex-row"
+    >
+      <p>&copy; {year} {SITE.legalName}. All rights reserved.</p>
+      <p>Built with Astro &amp; AWS · hosted on S3 + CloudFront.</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,53 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTA from '../../components/CTA.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('insights', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} type="article">
+  <section class="border-b border-slate-200 bg-linear-to-b from-brand-50 to-white">
+    <div class="mx-auto max-w-3xl px-4 py-16 md:py-20">
+      <a href="/insights" class="text-sm font-semibold text-brand-700 hover:text-brand-800">
+        &larr; All insights
+      </a>
+      <h1 class="mt-6 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
+        {post.data.title}
+      </h1>
+      <p class="mt-4 text-sm text-ink-500">
+        By {post.data.author} ·
+        <time datetime={post.data.publishDate.toISOString()}>{fmt(post.data.publishDate)}</time>
+      </p>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-3xl px-4 py-12 md:py-16">
+    <article class="prose">
+      <Content />
+    </article>
+    {
+      post.data.tags.length > 0 && (
+        <div class="mt-10 flex flex-wrap gap-2 border-t border-slate-200 pt-6">
+          {post.data.tags.map((t) => (
+            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-ink-500">
+              #{t}
+            </span>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <div class="pb-16 md:pb-24">
+    <CTA />
+  </div>
+</BaseLayout>

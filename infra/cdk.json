@@ -1,0 +1,10 @@
+{
+  "app": "npx tsx bin/aitecxo.ts",
+  "watch": {
+    "include": ["**"],
+    "exclude": ["node_modules", "cdk.out", "cdk-outputs.json"]
+  },
+  "context": {
+    "domainName": "aitecxo.com"
+  }
+}

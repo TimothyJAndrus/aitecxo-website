@@ -1,0 +1,143 @@
+---
+import { SITE } from '../config';
+const apiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? '';
+---
+
+<form
+  id="contact-form"
+  class="space-y-5"
+  data-api={apiUrl}
+  data-email={SITE.email}
+  novalidate
+>
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label for="cf-name" class="block text-sm font-medium text-ink-900">Name</label>
+      <input
+        id="cf-name"
+        name="name"
+        type="text"
+        required
+        autocomplete="name"
+        class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-ink-900 shadow-sm focus:border-brand-500"
+      />
+    </div>
+    <div>
+      <label for="cf-email" class="block text-sm font-medium text-ink-900">Email</label>
+      <input
+        id="cf-email"
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-ink-900 shadow-sm focus:border-brand-500"
+      />
+    </div>
+  </div>
+
+  <div>
+    <label for="cf-company" class="block text-sm font-medium text-ink-900">
+      Company <span class="font-normal text-ink-500">(optional)</span>
+    </label>
+    <input
+      id="cf-company"
+      name="company"
+      type="text"
+      autocomplete="organization"
+      class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-ink-900 shadow-sm focus:border-brand-500"
+    />
+  </div>
+
+  <div>
+    <label for="cf-message" class="block text-sm font-medium text-ink-900">How can we help?</label>
+    <textarea
+      id="cf-message"
+      name="message"
+      rows="5"
+      required
+      class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-ink-900 shadow-sm focus:border-brand-500"
+    ></textarea>
+  </div>
+
+  <!-- Honeypot: hidden from humans, tempting to bots. Leave empty. -->
+  <div class="absolute left-[-9999px]" aria-hidden="true">
+    <label for="cf-company-website">Company website</label>
+    <input id="cf-company-website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="flex flex-wrap items-center gap-4">
+    <button
+      type="submit"
+      class="inline-flex items-center justify-center rounded-lg bg-brand-700 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-60"
+    >
+      Send message
+    </button>
+    <p id="cf-status" role="status" aria-live="polite" class="text-sm"></p>
+  </div>
+</form>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('cf-status');
+
+  function setStatus(message: string, ok: boolean) {
+    if (!status) return;
+    status.textContent = message;
+    status.className = `text-sm ${ok ? 'text-green-700' : 'text-red-700'}`;
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const api = form.dataset.api?.trim();
+    const email = form.dataset.email || '';
+    const data = new FormData(form);
+
+    // Honeypot: silently succeed for bots.
+    if ((data.get('company_website') as string)?.length > 0) {
+      setStatus('Thanks — your message has been sent.', true);
+      form.reset();
+      return;
+    }
+
+    const name = (data.get('name') as string)?.trim();
+    const from = (data.get('email') as string)?.trim();
+    const message = (data.get('message') as string)?.trim();
+    if (!name || !from || !message) {
+      setStatus('Please complete your name, email, and message.', false);
+      return;
+    }
+
+    // No API configured yet → fall back to a mailto: link.
+    if (!api) {
+      const subject = encodeURIComponent(`Website inquiry from ${name}`);
+      const body = encodeURIComponent(`${message}\n\n— ${name} (${from})`);
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+      return;
+    }
+
+    const button = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+    if (button) button.disabled = true;
+    setStatus('Sending…', true);
+
+    try {
+      const res = await fetch(api, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email: from,
+          company: (data.get('company') as string) || '',
+          message,
+          company_website: '',
+        }),
+      });
+      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+      setStatus('Thanks — your message has been sent. We’ll be in touch shortly.', true);
+      form.reset();
+    } catch {
+      setStatus('Something went wrong. Please email us directly.', false);
+    } finally {
+      if (button) button.disabled = false;
+    }
+  });
+</script>

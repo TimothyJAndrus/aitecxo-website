@@ -1,0 +1,22 @@
+{
+  "name": "aitecxo-infra",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AWS CDK infrastructure for the AITeCXO website (hosting + serverless contact API).",
+  "scripts": {
+    "synth": "cdk synth",
+    "diff": "cdk diff",
+    "deploy": "cdk deploy --all",
+    "destroy": "cdk destroy --all"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.262.2",
+    "constructs": "^10.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "aws-cdk": "^2",
+    "tsx": "^4.23.1",
+    "typescript": "^5.9.3"
+  }
+}

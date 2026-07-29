@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { SITE } from '../config';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with AITeCXO to discuss AI strategy, implementation, or integration for your team."
+>
+  <PageHeader
+    eyebrow="Contact"
+    title="Let’s talk about your AI goals"
+    intro="Tell us what you’re trying to achieve. We’ll reply within one business day."
+  />
+
+  <div class="mx-auto max-w-6xl px-4 py-16 md:py-24">
+    <div class="grid gap-12 md:grid-cols-5">
+      <div class="md:col-span-3">
+        <ContactForm />
+      </div>
+      <aside class="md:col-span-2">
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+          <h2 class="text-lg font-semibold text-ink-900">Prefer email?</h2>
+          <p class="mt-2 text-ink-500">
+            Reach us directly at
+            <a class="font-medium text-brand-700 hover:text-brand-800" href={`mailto:${SITE.email}`}>
+              {SITE.email}
+            </a>.
+          </p>
+          <h3 class="mt-6 text-sm font-semibold text-ink-900">What happens next?</h3>
+          <ol class="mt-2 space-y-2 text-sm text-ink-500">
+            <li>1. We review your message and reply within one business day.</li>
+            <li>2. We schedule a free 30-minute discovery call.</li>
+            <li>3. We propose a right-sized way to move forward.</li>
+          </ol>
+          <p class="mt-6 text-sm text-ink-500">{SITE.location}</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

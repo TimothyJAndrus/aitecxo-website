@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/*
+ * AITeCXO design tokens (Tailwind v4 `@theme`).
+ * Defining tokens here generates matching utilities, e.g. `bg-brand-600`,
+ * `text-accent-500`, `font-sans`.
+ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+
+  /* Primary brand — deep, trustworthy indigo/blue */
+  --color-brand-50: #eff4ff;
+  --color-brand-100: #dbe6fe;
+  --color-brand-200: #bfd3fe;
+  --color-brand-300: #93b4fd;
+  --color-brand-400: #608afa;
+  --color-brand-500: #3b66f5;
+  --color-brand-600: #2547eb;
+  --color-brand-700: #1d34d8;
+  --color-brand-800: #1e2caf;
+  --color-brand-900: #1e2b8a;
+  --color-brand-950: #171d54;
+
+  /* Accent — cyan/teal for highlights and CTAs */
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #06b6d4;
+  --color-accent-600: #0891b2;
+
+  /* Neutral ink */
+  --color-ink-900: #0b1020;
+  --color-ink-700: #232a3d;
+  --color-ink-500: #4a5268;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-white text-ink-700 antialiased;
+  }
+
+  :where(a, button, input, textarea, select):focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-600;
+  }
+
+  ::selection {
+    @apply bg-brand-600 text-white;
+  }
+}
+
+/* Styling for rendered Markdown (case studies & insights). */
+@layer components {
+  .prose {
+    @apply leading-relaxed text-ink-700;
+  }
+  .prose > * + * {
+    @apply mt-5;
+  }
+  .prose h2 {
+    @apply mt-10 text-2xl font-bold text-ink-900;
+  }
+  .prose h3 {
+    @apply mt-8 text-xl font-semibold text-ink-900;
+  }
+  .prose h4 {
+    @apply mt-6 text-lg font-semibold text-ink-900;
+  }
+  .prose a {
+    @apply font-medium text-brand-700 underline underline-offset-2 hover:text-brand-800;
+  }
+  .prose ul {
+    @apply list-disc space-y-2 pl-6;
+  }
+  .prose ol {
+    @apply list-decimal space-y-2 pl-6;
+  }
+  .prose strong {
+    @apply font-semibold text-ink-900;
+  }
+  .prose blockquote {
+    @apply border-l-4 border-brand-200 pl-4 italic text-ink-500;
+  }
+  .prose code {
+    @apply rounded bg-slate-100 px-1.5 py-0.5 text-sm;
+  }
+  .prose pre {
+    @apply overflow-x-auto rounded-lg bg-ink-900 p-4 text-sm text-slate-100;
+  }
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+  .prose hr {
+    @apply my-8 border-slate-200;
+  }
+}

@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import CTA from '../components/CTA.astro';
+
+const faqs = [
+  {
+    q: 'What size companies do you work with?',
+    a: 'Both SMBs and enterprise teams. The approach scales: we start with a focused, high-value use case and expand from there regardless of company size.',
+  },
+  {
+    q: 'Do we need a data science team already?',
+    a: 'No. We can work alongside an existing team or operate independently and transfer knowledge as we go so your people can own what we build.',
+  },
+  {
+    q: 'Which cloud and tools do you use?',
+    a: 'We’re cloud-native on AWS by default and build with a bias toward secure, cost-aware, portable architectures. We integrate with the tools your team already uses.',
+  },
+  {
+    q: 'How do you protect our data and IP?',
+    a: 'Solutions run in your own cloud account wherever possible. We design with least-privilege access, clear data boundaries, and guardrails, and we don’t train third-party models on your data without explicit approval.',
+  },
+  {
+    q: 'How quickly can we see results?',
+    a: 'A discovery sprint typically takes about two weeks, and a first working prototype often follows within a few weeks after that. We optimize for early, measurable proof.',
+  },
+  {
+    q: 'What does an engagement cost?',
+    a: 'Pricing is tailored to scope. Many clients start with a fixed-fee discovery sprint, then move to project-based delivery or a monthly retainer. Reach out and we’ll propose a fit.',
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<BaseLayout
+  title="FAQ"
+  description="Answers to common questions about working with AITeCXO on AI strategy, implementation, and integration."
+>
+  <PageHeader eyebrow="FAQ" title="Frequently asked questions" />
+
+  <div class="mx-auto max-w-3xl px-4 py-16 md:py-24">
+    <div class="divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white">
+      {
+        faqs.map((f) => (
+          <details class="group px-6 py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-left font-semibold text-ink-900">
+              {f.q}
+              <span class="text-brand-700 transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+            </summary>
+            <p class="mt-3 text-ink-500">{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="pb-16 md:pb-24">
+    <CTA title="Still have questions?" text="Tell us about your goals and we’ll point you in the right direction." />
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</BaseLayout>
