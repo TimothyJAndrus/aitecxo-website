@@ -1,6 +1,7 @@
 import { Stack, StackProps, CfnOutput, Duration, Fn } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as ses from 'aws-cdk-lib/aws-ses';
 
 export interface DnsStackProps extends StackProps {
   domainName: string;
@@ -65,6 +66,13 @@ export class DnsStack extends Stack {
         'v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwhnPaUYDQiJDI79Be/nqPjtSIjQdAolBzYXIQtF09YwCWd2rxcy3rvB8f//0Jkc2D4+Yg3RwsfSTs1cF7/XGeIFVVrfomVMBU4+d6ALfj5PvDFP1rGEeEyMYKSnxVRkULS21Fl1TbwOEXJVd0yDP5opPNSJ/VhjcmMErvUm/pK3Do86N8vzWIGqJgwuojzcVwjrVq/VUlu0cWT+/giyU7fFWIdr42rTBQ+nIcEnNy0U+LLZz8m5d4QERnzkg6Ak+8FE/LIDc1tU72TkpfHzQRr1IB6HqaeW+/wEmc0nBpcT1HbzlE4p+KMmisUPcRlS9UqxlsfpSHE+HQQEDoUr0wwIDAQAB',
       ],
       ttl: Duration.hours(1),
+    });
+
+    // Amazon SES domain identity with Easy DKIM. Auto-publishes the SES DKIM
+    // CNAMEs in this zone so the contact-form Lambda can send from @aitecxo.com
+    // with DKIM aligned to the domain (passes DMARC).
+    new ses.EmailIdentity(this, 'SesDomainIdentity', {
+      identity: ses.Identity.publicHostedZone(this.hostedZone),
     });
 
     new CfnOutput(this, 'HostedZoneId', { value: this.hostedZone.hostedZoneId });
