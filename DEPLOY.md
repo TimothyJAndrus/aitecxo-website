@@ -106,30 +106,91 @@ Visit `https://aitecxo.com` — you should be live.
 
 ## 7. Enable CI/CD (GitHub Actions + OIDC)
 
-The workflow in `.github/workflows/deploy.yml` deploys on every push to `main` using OIDC (no stored keys).
+The workflow in `.github/workflows/deploy.yml` deploys on every push to `main` using OIDC (no stored keys). Docs-only pushes are skipped — see `paths-ignore` in the workflow.
 
-1. Create a GitHub OIDC identity provider and a deploy role in IAM. Trust policy (replace the account ID and repo):
-   ```json
-   {
-     "Version": "2012-10-17",
-     "Statement": [{
-       "Effect": "Allow",
-       "Principal": { "Federated": "arn:aws:iam::<ACCOUNT_ID>:oidc-provider/token.actions.githubusercontent.com" },
-       "Action": "sts:AssumeRoleWithWebIdentity",
-       "Condition": {
-         "StringEquals": { "token.actions.githubusercontent.com:aud": "sts.amazonaws.com" },
-         "StringLike": { "token.actions.githubusercontent.com:sub": "repo:TimothyJAndrus/aitecxo-website:ref:refs/heads/main" }
-       }
-     }]
-   }
-   ```
-2. Attach a permissions policy to the role covering CloudFormation, S3, CloudFront, ACM, Route 53, Lambda, API Gateway, SES, and IAM role management used by CDK. Start broad, then tighten to least privilege.
-3. Store the role ARN as a repo secret:
-   ```bash
-   gh secret set AWS_DEPLOY_ROLE_ARN --body "arn:aws:iam::<ACCOUNT_ID>:role/<ROLE_NAME>"
-   ```
+**This is already set up for the live account.** The role is `AitecxoWebsiteGitHubDeployRole` and the repo secret `AWS_DEPLOY_ROLE_ARN` points at it. The steps below document how it was built, for rebuilding it or porting to another account.
+
+### 7.1 Identity provider
+
+Create the GitHub OIDC provider once per account, with audience `sts.amazonaws.com`:
+
+```bash
+aws iam list-open-id-connect-providers   # check first; it may already exist
+```
+
+### 7.2 Trust policy — mind the subject format
+
+> **The `sub` claim is not always `repo:OWNER/REPO:ref:refs/heads/main`.** GitHub also issues an *immutable* subject that embeds numeric owner and repository IDs. This repo receives the immutable form, so a trust policy written with the classic format fails with `Not authorized to perform sts:AssumeRoleWithWebIdentity`.
+
+Find the subject your repo actually presents. The `sub_claim_prefix` field is authoritative — note that `use_immutable_subject` can report `false` while an immutable prefix is still issued:
+
+```bash
+gh api repos/TimothyJAndrus/aitecxo-website/actions/oidc/customization/sub
+```
+
+To see the exact string that reached AWS (most reliable, after at least one attempt), read it out of CloudTrail:
+
+```bash
+aws cloudtrail lookup-events --region us-east-1 \
+  --lookup-attributes AttributeKey=EventName,AttributeValue=AssumeRoleWithWebIdentity \
+  --max-results 1 --query 'Events[0].CloudTrailEvent' --output text \
+  | python3 -c 'import json,sys; print(json.load(sys.stdin)["userIdentity"]["userName"])'
+```
+
+The trust policy in use accepts both formats, so it keeps working if GitHub changes which one it issues. Both entries stay pinned to this repo and to `main`:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Sid": "GitHubActionsOidcMainBranchOnly",
+    "Effect": "Allow",
+    "Principal": { "Federated": "arn:aws:iam::358254890860:oidc-provider/token.actions.githubusercontent.com" },
+    "Action": "sts:AssumeRoleWithWebIdentity",
+    "Condition": {
+      "StringEquals": {
+        "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+        "token.actions.githubusercontent.com:sub": [
+          "repo:TimothyJAndrus@54549665/aitecxo-website@1316540118:ref:refs/heads/main",
+          "repo:TimothyJAndrus/aitecxo-website:ref:refs/heads/main"
+        ]
+      }
+    }
+  }]
+}
+```
+
+Use `StringEquals`, not `StringLike`, and never leave the `sub` condition off entirely — a policy that only checks `aud` lets **any** GitHub repository assume the role.
+
+### 7.3 Permissions — assume the CDK roles, don't re-grant them
+
+The role does **not** need CloudFormation, IAM, Route 53, Lambda, API Gateway, or SES permissions. `cdk deploy` assumes the CDK bootstrap roles, which already hold them. The deploy role only needs to assume those roles, plus the two things the workflow does with its own credentials (S3 sync and the CloudFront invalidation):
+
+- `sts:AssumeRole` and `sts:TagSession` on `cdk-hnb659fds-{deploy,file-publishing,lookup}-role-<account>-us-east-1`
+- `ssm:GetParameter` on `/cdk-bootstrap/hnb659fds/version`
+- `s3:ListBucket` / `s3:GetBucketLocation` on the site bucket, and `s3:GetObject|PutObject|DeleteObject` on its contents
+- `cloudfront:CreateInvalidation` / `GetInvalidation` on the distribution
+
+Inspect the live policy with:
+
+```bash
+aws iam get-role-policy --role-name AitecxoWebsiteGitHubDeployRole \
+  --policy-name AitecxoWebsiteDeployPermissions
+```
+
+### 7.4 Store the role ARN
+
+```bash
+gh secret set AWS_DEPLOY_ROLE_ARN --body "arn:aws:iam::358254890860:role/AitecxoWebsiteGitHubDeployRole"
+```
 
 After that, `git push` to `main` deploys automatically.
+
+### Troubleshooting
+
+- **`Could not load credentials from any providers`** — `AWS_DEPLOY_ROLE_ARN` is missing or empty, so `role-to-assume` never reached the action. Confirm with `gh secret list`; the step log also omits `role-to-assume` from its `with:` block.
+- **`Not authorized to perform sts:AssumeRoleWithWebIdentity`** — the credentials reached STS but the trust policy rejected them. Almost always a `sub` mismatch (see 7.2); compare the CloudTrail value against the policy.
+- **`Node.js vXX is not supported by Astro`** — the workflow's `node-version` has drifted below Astro's floor. Keep it in sync with `engines.node` in `package.json`.
 
 ## Teardown
 
