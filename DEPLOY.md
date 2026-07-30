@@ -4,7 +4,7 @@ This guide covers the **one-time** setup to get the site live on AWS, then the o
 
 Everything runs in **us-east-1** (required for CloudFront's ACM certificate). The CDK app defines three stacks:
 
-- `AitecxoDnsStack` — the Route 53 public hosted zone (deploy + delegate first).
+- `AitecxoDnsStack` — the Route 53 public hosted zone, plus the SES domain identity and its DKIM records (deploy + delegate first).
 - `AitecxoSiteStack` — S3 + CloudFront + ACM + DNS records.
 - `AitecxoContactApiStack` — API Gateway + Lambda + SES for the contact form.
 
@@ -40,6 +40,8 @@ Deploy just the DNS stack, then read its nameservers:
 npx cdk deploy AitecxoDnsStack
 ```
 
+This also creates the **SES domain identity** for `aitecxo.com` with Easy DKIM and publishes the three DKIM `CNAME` records into the zone automatically — there is nothing to copy by hand. SES cannot finish verifying the domain until delegation below is live, so expect the identity to sit unverified until then.
+
 Copy the four servers from the `HostedZoneNameServers` output. **In Network Solutions' nameserver settings for `aitecxo.com`, set custom nameservers to these Route 53 values** (replacing the `worldnic.com` entries). This delegates DNS to Route 53 and is what lets ACM validate the certificate.
 
 Verify delegation has propagated (can take minutes to a few hours):
@@ -64,10 +66,21 @@ Note the outputs: `BucketName`, `DistributionId`, `SiteUrl`.
 
 ## 5. Set up SES for the contact form
 
-In the SES console (us-east-1):
+The domain identity and DKIM records are managed by `AitecxoDnsStack` (step 3), so there is **no manual identity verification or DKIM record entry**. Do not create an identity for `aitecxo.com` in the SES console — a console-created identity collides with the CDK-managed one and the stack deploy will fail.
 
-1. **Verify a domain identity** for `aitecxo.com` and add the provided DKIM `CNAME` records in Route 53.
-2. Ensure the send address (`no-reply@aitecxo.com`) and destination (`hello@aitecxo.com`) work for your setup. New accounts start in the **SES sandbox**, which only sends to verified addresses — verify your destination inbox, or **request production access** before accepting real inquiries.
+Once delegation has propagated, confirm SES finished verifying the domain:
+
+```bash
+aws sesv2 get-email-identity --email-identity aitecxo.com --region us-east-1 \
+  --query '{Verified:VerifiedForSendingStatus,Dkim:DkimAttributes.Status}'
+```
+
+Both should report `true` / `SUCCESS`. If not, verification is still pending on DNS — recheck `dig +short NS aitecxo.com` and the DKIM `CNAME`s.
+
+What still requires manual action:
+
+- **Sandbox limits.** New accounts start in the **SES sandbox**, which only sends to verified addresses. Verify the destination inbox (`hello@aitecxo.com`), or **request production access** before accepting real inquiries.
+- **Recipient mailbox.** DKIM proves the domain can send; it does not create a mailbox. Make sure mail to `hello@aitecxo.com` actually lands somewhere you read.
 
 Override the default addresses at deploy time if needed:
 
@@ -126,3 +139,5 @@ npx cdk destroy --all
 ```
 
 The site bucket is set to auto-delete objects, so it removes cleanly. The hosted zone is deleted with `AitecxoDnsStack`; if you plan to redeploy, keep it to avoid re-delegating nameservers.
+
+Destroying `AitecxoDnsStack` now also deletes the **SES domain identity**, which stops the contact form from sending. Redeploying issues fresh DKIM tokens and publishes new `CNAME`s, so the domain has to re-verify before mail flows again — another reason to keep this stack if you intend to come back.
