@@ -3,6 +3,16 @@ name: Deploy
 on:
   push:
     branches: [main]
+    # Skip deploys for docs-only pushes. These patterns deliberately use a
+    # single `*` (which does not match `/`), so they cover root-level docs
+    # like README.md and DEPLOY.md while still deploying content changes
+    # under src/content/**.md — those are part of the published site.
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.editorconfig'
   workflow_dispatch:
 
 # Only one production deploy at a time.

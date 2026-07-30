@@ -101,6 +101,12 @@ Once the GitHub Actions OIDC role is configured (DEPLOY.md §7), pushing to `mai
 git add -A && git commit -m "…" && git push origin main
 ```
 
+Pushes that only touch root-level docs (`*.md`, `docs/**`, `LICENSE`, and similar) are skipped via `paths-ignore`, so documentation edits no longer redeploy production. Content Markdown under `src/content/` is *not* skipped, since it is part of the published site. To deploy a skipped change anyway, dispatch the workflow manually:
+
+```bash
+gh workflow run deploy.yml --ref main
+```
+
 ### Manual
 
 Requires valid credentials (`aws login`; sessions last up to 12h). From the repo root:
