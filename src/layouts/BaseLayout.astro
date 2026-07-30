@@ -15,7 +15,7 @@ interface Props {
 const {
   title,
   description = SITE.description,
-  image = '/og.svg',
+  image = '/og.png',
   type = 'website',
   noindex = false,
 } = Astro.props;
@@ -42,12 +42,16 @@ const orgJsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <meta name="theme-color" content="#1d34d8" />
+    <meta name="theme-color" content="#33c7df" />
     <meta name="generator" content={Astro.generator} />
 
     <!-- Open Graph -->
@@ -57,6 +61,9 @@ const orgJsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE.name} — ${SITE.tagline}`} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />

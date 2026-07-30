@@ -1,6 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { NAV, SITE } from '../config';
-import Logo from './Logo.astro';
+import logoFull from '../assets/logo-full.png';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) =>
@@ -10,7 +11,15 @@ const isActive = (href: string) =>
 <header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 backdrop-blur">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
     <a href="/" class="flex items-center gap-2" aria-label={`${SITE.name} home`}>
-      <Logo class="h-8 w-auto" />
+      {/* Decorative: the link above already carries the accessible name. */}
+      <Image
+        src={logoFull}
+        alt=""
+        height={32}
+        densities={[1, 2]}
+        loading="eager"
+        class="h-8 w-auto"
+      />
     </a>
 
     <nav class="hidden items-center gap-1 md:flex" aria-label="Primary">

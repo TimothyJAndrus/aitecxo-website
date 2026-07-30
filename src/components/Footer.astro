@@ -1,12 +1,14 @@
 ---
+import { Image } from 'astro:assets';
 import { SITE, NAV, SOCIAL, SERVICES } from '../config';
+import wordmark from '../assets/wordmark.png';
 const year = new Date().getFullYear();
 ---
 
 <footer class="mt-24 border-t border-slate-200 bg-slate-50">
   <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-4 py-12 md:grid-cols-4">
     <div class="col-span-2 md:col-span-1">
-      <p class="text-lg font-bold text-ink-900">{SITE.name}</p>
+      <Image src={wordmark} alt={SITE.name} height={24} densities={[1, 2]} class="h-6 w-auto" />
       <p class="mt-2 max-w-xs text-sm text-ink-500">{SITE.tagline}</p>
       <p class="mt-4 text-sm text-ink-500">{SITE.location}</p>
     </div>

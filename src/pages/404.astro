@@ -1,10 +1,13 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { NAV } from '../config';
+import logoMark from '../assets/logo-mark.png';
 ---
 
 <BaseLayout title="Page not found" noindex>
   <section class="mx-auto flex max-w-3xl flex-col items-center px-4 py-24 text-center md:py-32">
+    <Image src={logoMark} alt="" width={72} densities={[1, 2]} class="mb-6 h-16 w-auto opacity-90" />
     <p class="text-sm font-bold uppercase tracking-wide text-accent-600">404</p>
     <h1 class="mt-2 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
       This page went off-script
