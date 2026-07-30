@@ -95,17 +95,35 @@ First-time setup (bootstrap, DNS delegation, SES) is in **[DEPLOY.md](DEPLOY.md)
 
 ### Automated (recommended)
 
-Once the GitHub Actions OIDC role is configured (DEPLOY.md §7), pushing to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml): it deploys the CDK stacks, builds the site with the contact endpoint injected, syncs `dist/` to S3, and invalidates CloudFront.
+Work on a branch and merge through a pull request — **anything that lands on `main` deploys straight to production**, with no staging environment in between.
 
 ```bash
-git add -A && git commit -m "…" && git push origin main
+git switch -c my-change
+# … edit …
+git commit -am "…"
+git push -u origin my-change
+gh pr create --fill
 ```
+
+Opening the PR runs [`.github/workflows/ci.yml`](.github/workflows/ci.yml), which builds the site and synthesizes the CDK stacks. It uses **no AWS credentials**: the deploy role only trusts `refs/heads/main`, so a pull-request token cannot assume it by design. CI proves the code compiles and the infrastructure is valid — it does not prove a deploy will succeed.
+
+Merging the PR pushes to `main`, which runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml): it deploys the CDK stacks, builds the site with the contact endpoint injected, syncs `dist/` to S3, and invalidates CloudFront.
 
 Pushes that only touch root-level docs (`*.md`, `docs/**`, `LICENSE`, and similar) are skipped via `paths-ignore`, so documentation edits no longer redeploy production. Content Markdown under `src/content/` is *not* skipped, since it is part of the published site. To deploy a skipped change anyway, dispatch the workflow manually:
 
 ```bash
 gh workflow run deploy.yml --ref main
 ```
+
+#### The branch rule is advisory
+
+This repository is private on a plan without branch protection, so GitHub **cannot** enforce pull requests or required checks. Nothing server-side stops a direct push to `main`. A local `pre-push` hook is included as a guardrail; enable it once per clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+It refuses direct pushes to `main` and `git push --no-verify` bypasses it, which is the intended escape hatch for a hotfix or revert. Making the repository public, or upgrading the plan, would allow real branch protection with a required CI check.
 
 ### Manual
 

@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Blocks direct pushes to main so changes go through a pull request.
+#
+# This repository is private on a plan without branch protection, so GitHub
+# cannot enforce this server-side. The hook is a local guard only: it is
+# advisory, it is not installed automatically, and `--no-verify` bypasses it.
+# Treat it as a guardrail against muscle memory, not a security control.
+#
+# Enable it in a fresh clone with:
+#   git config core.hooksPath .githooks
+
+protected="refs/heads/main"
+
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  if [ "$remote_ref" = "$protected" ]; then
+    cat >&2 <<'MSG'
+
+  Direct push to main blocked.
+
+  This repo uses a feature-branch workflow: pushing to main deploys
+  straight to production without review.
+
+    git switch -c my-change
+    git push -u origin my-change
+    gh pr create --fill
+
+  Merging the PR triggers the deploy.
+
+  To bypass deliberately (hotfix, revert):
+    git push --no-verify
+
+MSG
+    exit 1
+  fi
+done
+
+exit 0
