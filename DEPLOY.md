@@ -15,7 +15,7 @@ Everything runs in **us-east-1** (required for CloudFront's ACM certificate). Th
   aws sts get-caller-identity
   ```
   If this fails, sign in first (e.g. `aws login` or your usual `aws configure` / SSO flow).
-- Node.js 20+.
+- Node.js 22.12+ (required by Astro 7).
 - The domain `aitecxo.com` (registered at **Network Solutions**).
 
 ## 1. Install dependencies

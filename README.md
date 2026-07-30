@@ -32,7 +32,7 @@ Built as a static [Astro](https://astro.build) site, hosted on AWS (S3 + CloudFr
 
 ## Local development
 
-Requires Node.js 20+.
+Requires Node.js 22.12+ (Astro 7's minimum; CI builds on Node 24).
 
 ```bash
 npm install
