@@ -9,28 +9,34 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
 
-  /* Primary brand — deep, trustworthy indigo/blue */
-  --color-brand-50: #eff4ff;
-  --color-brand-100: #dbe6fe;
-  --color-brand-200: #bfd3fe;
-  --color-brand-300: #93b4fd;
-  --color-brand-400: #608afa;
-  --color-brand-500: #3b66f5;
-  --color-brand-600: #2547eb;
-  --color-brand-700: #1d34d8;
-  --color-brand-800: #1e2caf;
-  --color-brand-900: #1e2b8a;
-  --color-brand-950: #171d54;
+  /*
+   * Primary brand — the logo cyan (#33c7df) sits at 400. It is far too light
+   * for text or button fills (~1.9:1 on white), so 600-950 are progressively
+   * deepened along the same hue to carry interactive and text roles. Every
+   * pairing the site actually uses clears WCAG AA; the tightest is
+   * accent-600 on white at 4.68:1.
+   */
+  --color-brand-50: #ecfafe;
+  --color-brand-100: #cff2fb;
+  --color-brand-200: #a6e7f5;
+  --color-brand-300: #6fd7ec;
+  --color-brand-400: #33c7df;
+  --color-brand-500: #17a8c2;
+  --color-brand-600: #0d879e;
+  --color-brand-700: #0e6b7e;
+  --color-brand-800: #125668;
+  --color-brand-900: #144756;
+  --color-brand-950: #082e3a;
 
-  /* Accent — cyan/teal for highlights and CTAs */
-  --color-accent-400: #22d3ee;
-  --color-accent-500: #06b6d4;
-  --color-accent-600: #0891b2;
+  /* Accent — the bright end of the same cyan, for highlights and small fills */
+  --color-accent-400: #33c7df;
+  --color-accent-500: #19b3cd;
+  --color-accent-600: #0b7f96;
 
-  /* Neutral ink */
-  --color-ink-900: #0b1020;
-  --color-ink-700: #232a3d;
-  --color-ink-500: #4a5268;
+  /* Neutral ink — the slate from the logo wordmark (#414f5f) */
+  --color-ink-900: #1b232d;
+  --color-ink-700: #33404f;
+  --color-ink-500: #59677a;
 }
 
 @layer base {
