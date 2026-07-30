@@ -30,7 +30,7 @@ const process = [
         Three ways we help you win with AI
       </h2>
       <p class="mt-4 text-lg text-ink-500">
-        Whether you're exploring your first use case or scaling AI across the business, we meet you where you are.
+        Whether you're exploring your first use case or scaling AI across the org, we meet you where you are — and focus on outcomes you can measure.
       </p>
     </div>
     <div class="mt-10 grid gap-6 md:grid-cols-3">
@@ -56,13 +56,18 @@ const process = [
         <h2 class="mt-2 text-3xl font-bold tracking-tight text-ink-900 md:text-4xl">
           Ship narrow. Measure honestly. Expand from proof.
         </h2>
+        <p class="mt-4 text-lg text-ink-500">
+          A disciplined path from idea to impact — built to prove value early and keep risk low.
+        </p>
       </div>
       <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {
           process.map((p) => (
-            <div class="rounded-2xl border border-slate-200 bg-white p-6">
-              <p class="text-sm font-bold text-accent-600">{p.step}</p>
-              <h3 class="mt-2 text-lg font-semibold text-ink-900">{p.title}</h3>
+            <div class="group rounded-2xl border border-slate-200 bg-white p-6 transition-shadow hover:shadow-md">
+              <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-sm font-bold text-brand-700 ring-1 ring-inset ring-brand-100">
+                {p.step}
+              </div>
+              <h3 class="mt-4 text-lg font-semibold text-ink-900">{p.title}</h3>
               <p class="mt-2 text-sm text-ink-500">{p.text}</p>
             </div>
           ))

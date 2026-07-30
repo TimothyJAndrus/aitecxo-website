@@ -8,7 +8,18 @@ import { SITE } from '../config';
     aria-hidden="true"
   >
   </div>
-  <div class="mx-auto max-w-6xl px-4 py-20 md:py-28">
+  <div
+    class="pointer-events-none absolute -bottom-40 -left-24 h-80 w-80 rounded-full bg-brand-300/20 blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class="pointer-events-none absolute inset-0 opacity-70"
+    style="background-image: radial-gradient(circle at 1px 1px, rgb(37 71 235 / 0.06) 1px, transparent 0); background-size: 28px 28px; -webkit-mask-image: linear-gradient(to bottom, black, transparent 75%); mask-image: linear-gradient(to bottom, black, transparent 75%);"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="relative mx-auto max-w-6xl px-4 py-20 md:py-28">
     <p class="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-3 py-1 text-sm font-medium text-brand-700">
       <span class="h-2 w-2 rounded-full bg-accent-500"></span>
       AI consulting for SMB &amp; enterprise
@@ -17,7 +28,7 @@ import { SITE } from '../config';
       Innovate, implement, and integrate <span class="text-brand-700">AI</span> — without the guesswork.
     </h1>
     <p class="mt-6 max-w-2xl text-lg text-ink-500 md:text-xl">
-      {SITE.name} partners with your team to turn AI from hype into measurable business outcomes — from strategy and roadmaps to production-ready systems in your own cloud.
+      {SITE.name} helps SMB and enterprise teams turn AI from hype into measurable outcomes — from opportunity discovery and roadmaps to secure, production-ready systems running in your own cloud.
     </p>
     <div class="mt-8 flex flex-col gap-3 sm:flex-row">
       <a
