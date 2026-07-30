@@ -43,12 +43,15 @@ export class DnsStack extends Stack {
       ttl: Duration.hours(1),
     });
 
-    // DMARC — DKIM + SPF verified passing end-to-end, so enforce at quarantine.
-    // Ramp to p=reject after a monitoring period with clean aggregate (rua) reports.
+    // DMARC — enforced at quarantine (DKIM + SPF verified passing). Aggregate
+    // reports go to the dmarc@ group and the Postmark analyzer. Ramp to p=reject
+    // after a monitoring period with clean reports.
     new route53.TxtRecord(this, 'Dmarc', {
       zone: this.hostedZone,
       recordName: '_dmarc',
-      values: ['v=DMARC1; p=quarantine; rua=mailto:dmarc@aitecxo.com'],
+      values: [
+        'v=DMARC1; p=quarantine; rua=mailto:dmarc@aitecxo.com, mailto:re+mziba1x3q44@dmarc.postmarkapp.com',
+      ],
       ttl: Duration.hours(1),
     });
 
