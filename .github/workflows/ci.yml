@@ -1,0 +1,57 @@
+name: CI
+
+# Validation for pull requests. Deploys are handled separately by deploy.yml,
+# which only runs on pushes to main.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# A newer push to the same PR makes the in-flight run irrelevant.
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+# Read-only. This job deliberately requests no `id-token` permission and
+# configures no AWS credentials: the deploy role's trust policy is scoped to
+# refs/heads/main, so a pull_request token could not assume it anyway. Keeping
+# cloud access out of PR validation is the point, not a limitation.
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build site and synthesize infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Astro 7 requires >=22.12.0; keep in sync with engines.node.
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            infra/package-lock.json
+
+      - name: Install site dependencies
+        run: npm ci
+
+      - name: Install infra dependencies
+        run: npm ci
+        working-directory: infra
+
+      - name: Build site
+        # PUBLIC_CONTACT_API_URL is intentionally unset. It normally comes from
+        # a CDK stack output, which needs AWS access; without it the contact
+        # form falls back to a mailto: link, which does not affect whether the
+        # build is valid.
+        run: npm run build
+
+      - name: Synthesize CDK stacks
+        # The app has no context lookups (fromLookup), so synth resolves fully
+        # offline and catches infrastructure errors before they reach main.
+        # `cdk synth` covers every stack by default; there is no --all flag.
+        working-directory: infra
+        run: npx cdk synth --quiet
