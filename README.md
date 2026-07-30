@@ -50,6 +50,8 @@ npm run preview    # Preview the production build locally
 
 The contact form posts to the serverless endpoint defined by `PUBLIC_CONTACT_API_URL`. Copy `.env.example` to `.env` and set it to the `ContactApiUrl` output from the CDK deploy. Until it is set, the form gracefully falls back to a `mailto:` link.
 
+Note that CORS on the deployed API only allows `https://aitecxo.com`, so browser posts from `localhost` are rejected. Leave `PUBLIC_CONTACT_API_URL` unset for local work (and rely on the `mailto:` fallback) unless you deliberately widen `allowOrigins`. See [Contact API](#contact-api) for the full request/response contract and rate limits.
+
 ## Deployment architecture
 
 The site is fully static and served from S3 through CloudFront; the only dynamic piece is the serverless contact API. Everything is defined as code in [`infra/`](infra/) and deployed to **us-east-1** (required for CloudFront's ACM certificate).
@@ -78,7 +80,7 @@ Three CDK stacks, deployed in order:
 - **Hosted zone:** `Z04272101NWQH90TO3IKE`
 - **CloudFront distribution:** `EPQ17AE6B3LLH` (`dbnrgfydwaex.cloudfront.net`)
 - **Site bucket:** `aitecxositestack-sitebucket397a1860-h5wc1rljrytw`
-- **Contact endpoint:** `https://v2lrzu3l73.execute-api.us-east-1.amazonaws.com/contact`
+- **Contact endpoint:** `POST https://v2lrzu3l73.execute-api.us-east-1.amazonaws.com/contact` — throttled to 2 req/s, burst 5 ([details](#contact-api))
 
 These values change if resources are recreated, so treat CloudFormation as the source of truth:
 
@@ -131,11 +133,67 @@ Drop a Markdown file into `src/content/case-studies/` or `src/content/insights/`
 
 Edit `src/config.ts` — the single source of truth for site metadata, navigation, the service pillars, and the contact email.
 
-### Contact form / SES
+### Contact API
+
+A single route: **`POST /contact`**, currently at `https://v2lrzu3l73.execute-api.us-east-1.amazonaws.com/contact`. API Gateway generates that hostname, and it changes if the HTTP API is ever recreated — treat the stack output as the source of truth:
+
+```bash
+aws cloudformation describe-stacks --region us-east-1 \
+  --stack-name AitecxoContactApiStack \
+  --query "Stacks[0].Outputs[?OutputKey=='ContactApiUrl'].OutputValue" --output text
+```
+
+**Request** (`content-type: application/json`):
+
+```json
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "company": "Acme Corp",
+  "message": "We'd like help with an AI roadmap.",
+  "company_website": ""
+}
+```
+
+- `name`, `email`, and `message` are required; `email` must be syntactically valid.
+- `company` is optional. Length caps: `name` and `company` 200 characters, `message` 5000.
+- `company_website` is a **honeypot** — keep it hidden and empty in the form. Submissions that fill it get a `200` response and are silently discarded without sending mail.
+
+**Responses:**
+
+- `200 {"ok":true}` — handed off to SES (also returned for discarded honeypot hits).
+- `400 {"error":"…"}` — malformed JSON, missing/invalid fields, or oversized input.
+- `502 {"error":"Email delivery failed. Please email us directly."}` — SES rejected the send.
+- `503 {"message":"Service Unavailable"}` — throttled; see below.
+
+**CORS** is locked to `https://aitecxo.com` for `OPTIONS, POST` with the `content-type` header, and preflights are cached for 1 hour.
+
+#### Throttling
+
+The `$default` stage is throttled at **2 requests/second sustained, burst 5**, configured via `defaultRouteSettings` in [`infra/lib/contact-api-stack.ts`](infra/lib/contact-api-stack.ts). Things to know:
+
+- The limit applies **per stage across all callers**, not per IP. It caps total contact-form traffic; it does not single out an individual abuser.
+- Excess requests are rejected by API Gateway *before* reaching the Lambda, so they return API Gateway's error shape — `503 {"message":"Service Unavailable"}` with a `message` key — rather than the Lambda's `{"error":…}`. Note this is **503, not 429**. Client code should treat it as "retry in a moment," not a permanent failure.
+- Check the live values with:
+  ```bash
+  aws apigatewayv2 get-stages --api-id <api-id> --region us-east-1 \
+    --query 'Items[].DefaultRouteSettings'
+  ```
+- Adjust by editing `throttlingRateLimit` / `throttlingBurstLimit` and redeploying `AitecxoContactApiStack`.
+
+#### SES and recipients
 
 - The Lambda sends from `no-reply@aitecxo.com` to `hello@aitecxo.com` by default. Change recipients by redeploying with context, e.g. `cd infra && npx cdk deploy AitecxoContactApiStack -c contactToEmail=you@example.com`.
 - Delivery requires a verified SES domain identity for `aitecxo.com`; while in the SES sandbox, both sender and recipient must fall under a verified identity (see DEPLOY.md §5).
 - Tail Lambda logs: `aws logs tail /aws/lambda/<function-name> --follow --region us-east-1` (find the name under the ContactApiStack resources).
+- Smoke-test the deployed endpoint end to end (this sends a real email):
+  ```bash
+  curl -sS -X POST "$(aws cloudformation describe-stacks --region us-east-1 \
+    --stack-name AitecxoContactApiStack \
+    --query "Stacks[0].Outputs[?OutputKey=='ContactApiUrl'].OutputValue" --output text)" \
+    -H 'content-type: application/json' \
+    -d '{"name":"Smoke Test","email":"you@example.com","message":"Testing."}'
+  ```
 
 ### Credentials
 
