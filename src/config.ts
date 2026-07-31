@@ -20,8 +20,14 @@ export const NAV: { label: string; href: string }[] = [
   { label: 'FAQ', href: '/faq' },
 ];
 
+/**
+ * Public profile links. Keep these canonical — no tracking or session query
+ * strings (e.g. LinkedIn's `?viewAsMember=true`, which only appears when an
+ * admin views their own page). They are rendered in the footer and published as
+ * `sameAs` in the JSON-LD, so search engines treat them as identity signals.
+ */
 export const SOCIAL: { label: string; href: string }[] = [
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/aitecxo/' },
   { label: 'GitHub', href: 'https://github.com/TimothyJAndrus' },
 ];
 
