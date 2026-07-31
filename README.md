@@ -157,6 +157,14 @@ Drop a Markdown file into `src/content/case-studies/` or `src/content/insights/`
 
 Edit `src/config.ts` — the single source of truth for site metadata, navigation, the service pillars, and the contact email.
 
+Note that `src/config.ts` holds the **publicly displayed** address, while the address the contact form actually delivers to is the CDK default in [`infra/bin/aitecxo.ts`](infra/bin/aitecxo.ts). They are independent; keep them deliberately aligned.
+
+### Replace the brand assets
+
+Logo sources live in `src/assets/` (Astro optimizes them to WebP at build time); icons, the manifest, and the OG card are static files in `public/`.
+
+The PNGs in `public/` are **palette-encoded with dithering disabled**, which suits flat two-colour artwork and cut them by ~75% (456kB to 111kB) with no visible change. A fresh export from a favicon generator will be full truecolour and several times larger, so re-optimize after replacing them rather than committing the raw export.
+
 ### Contact API
 
 A single route: **`POST /contact`**, currently at `https://v2lrzu3l73.execute-api.us-east-1.amazonaws.com/contact`. API Gateway generates that hostname, and it changes if the HTTP API is ever recreated — treat the stack output as the source of truth:
@@ -209,7 +217,8 @@ The `$default` stage is throttled at **2 requests/second sustained, burst 5**, c
 
 - The Lambda sends from `no-reply@aitecxo.com` to `tim@aitecxo.com`. Both defaults live in [`infra/bin/aitecxo.ts`](infra/bin/aitecxo.ts).
 - A `-c contactToEmail=…` override applies to that single `cdk deploy` only. CDK context is not persisted in the stack, so the next deploy that omits the flag — including every CI deploy — silently reverts to the default. To change the recipient for good, edit the default.
-- Delivery requires a verified SES domain identity for `aitecxo.com`. The account is still in the **SES sandbox**, which restricts recipients to verified identities — but since the recipient is always an `@aitecxo.com` address covered by the verified domain, contact-form mail is delivered normally. The visitor's own address is only set as `Reply-To`, never as a recipient, so it needs no verification. What the sandbox does cap is volume: 200 messages/day and a **1/sec** send rate, which is below this API's 2 req/s throttle.
+- Delivery requires a verified SES domain identity for `aitecxo.com`. The account is still in the **SES sandbox**, which restricts recipients to verified identities — but since the recipient is always an `@aitecxo.com` address covered by the verified domain, contact-form mail is delivered normally. The visitor's own address is only set as `Reply-To`, never a recipient, so it needs no verification.
+- The sandbox caps volume at **200 messages/day** and a **1/sec** send rate. Note the API's own throttle allows 2 req/s, so two submissions landing in the same second can reach SES faster than the sandbox permits. The AWS SDK retries throttling errors by default (standard mode, 3 attempts with backoff), which comfortably absorbs a brief spike inside the Lambda's 10s timeout; only a sustained burst would exhaust the retries and surface as `502`. Requesting production access removes the cap and is the real fix if traffic ever justifies it.
 - Tail Lambda logs: `aws logs tail /aws/lambda/<function-name> --follow --region us-east-1` (find the name under the ContactApiStack resources).
 - Smoke-test the deployed endpoint end to end (this sends a real email):
   ```bash
