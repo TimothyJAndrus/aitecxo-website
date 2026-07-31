@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE } from '../config';
+import { SITE, SOCIAL } from '../config';
 
 interface Props {
   title?: string;
@@ -34,6 +34,9 @@ const orgJsonLd = {
   email: `mailto:${SITE.email}`,
   areaServed: 'Worldwide',
   serviceType: ['AI strategy', 'AI implementation', 'AI integration'],
+  // Links the site to its off-site profiles so search engines can consolidate
+  // them into one entity.
+  sameAs: SOCIAL.map((s) => s.href),
 };
 ---
 
