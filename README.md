@@ -207,8 +207,9 @@ The `$default` stage is throttled at **2 requests/second sustained, burst 5**, c
 
 #### SES and recipients
 
-- The Lambda sends from `no-reply@aitecxo.com` to `hello@aitecxo.com` by default. Change recipients by redeploying with context, e.g. `cd infra && npx cdk deploy AitecxoContactApiStack -c contactToEmail=you@example.com`.
-- Delivery requires a verified SES domain identity for `aitecxo.com`; while in the SES sandbox, both sender and recipient must fall under a verified identity (see DEPLOY.md §5).
+- The Lambda sends from `no-reply@aitecxo.com` to `tim@aitecxo.com`. Both defaults live in [`infra/bin/aitecxo.ts`](infra/bin/aitecxo.ts).
+- A `-c contactToEmail=…` override applies to that single `cdk deploy` only. CDK context is not persisted in the stack, so the next deploy that omits the flag — including every CI deploy — silently reverts to the default. To change the recipient for good, edit the default.
+- Delivery requires a verified SES domain identity for `aitecxo.com`. The account is still in the **SES sandbox**, which restricts recipients to verified identities — but since the recipient is always an `@aitecxo.com` address covered by the verified domain, contact-form mail is delivered normally. The visitor's own address is only set as `Reply-To`, never as a recipient, so it needs no verification. What the sandbox does cap is volume: 200 messages/day and a **1/sec** send rate, which is below this API's 2 req/s throttle.
 - Tail Lambda logs: `aws logs tail /aws/lambda/<function-name> --follow --region us-east-1` (find the name under the ContactApiStack resources).
 - Smoke-test the deployed endpoint end to end (this sends a real email):
   ```bash

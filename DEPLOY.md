@@ -79,16 +79,18 @@ Both should report `true` / `SUCCESS`. If not, verification is still pending on 
 
 What still requires manual action:
 
-- **Sandbox limits.** New accounts start in the **SES sandbox**, which only sends to verified addresses. Verify the destination inbox (`hello@aitecxo.com`), or **request production access** before accepting real inquiries.
-- **Recipient mailbox.** DKIM proves the domain can send; it does not create a mailbox. Make sure mail to `hello@aitecxo.com` actually lands somewhere you read.
+- **Sandbox limits.** New accounts start in the **SES sandbox**, which only delivers to verified identities. That does not block the contact form: it always sends to an `@aitecxo.com` address, which the verified domain identity covers. The caps are what matter — 200 messages/day and a 1/sec send rate. **Request production access** before sending to arbitrary external addresses or expecting bursts.
+- **Recipient mailbox.** DKIM proves the domain can send; it does not create a mailbox. Make sure mail to `tim@aitecxo.com` actually lands somewhere you read.
 
-Override the default addresses at deploy time if needed:
+The addresses default to `tim@aitecxo.com` and `no-reply@aitecxo.com`, set in `infra/bin/aitecxo.ts`. They can be overridden for a single deploy:
 
 ```bash
 npx cdk deploy AitecxoContactApiStack \
-  -c contactToEmail=hello@aitecxo.com \
+  -c contactToEmail=someone@aitecxo.com \
   -c contactFromEmail=no-reply@aitecxo.com
 ```
+
+> Context is **per-invocation** and is not stored in the stack. The next `cdk deploy` without these flags — which is what CI runs — resets both to the defaults above. For a lasting change, edit the defaults.
 
 Note the `ContactApiUrl` output.
 
