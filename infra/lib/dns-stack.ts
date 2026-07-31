@@ -77,7 +77,8 @@ export class DnsStack extends Stack {
 
     new CfnOutput(this, 'HostedZoneId', { value: this.hostedZone.hostedZoneId });
     new CfnOutput(this, 'HostedZoneNameServers', {
-      description: "Point the domain's nameservers (at Google) to these values.",
+      description:
+        "Point the domain's nameservers (at Network Solutions) to these values.",
       value: Fn.join(', ', this.hostedZone.hostedZoneNameServers ?? []),
     });
   }

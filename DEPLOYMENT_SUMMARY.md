@@ -162,17 +162,69 @@ Oldest first.
 - `94aea68` (16:50) — `ci: build on Node 24 and correct the declared Node requirement`
 - `e574d45` (17:07) — `docs: correct the OIDC trust policy subject format in DEPLOY.md`
 
-## Open items
-
-Not addressed in this session.
-
-- **SES sandbox status unconfirmed.** If the account is still in the sandbox, the
-  contact form can only deliver to verified addresses and genuine inquiries fail
-  silently. Worth checking before promoting the form.
-- **`infra/lib/dns-stack.ts:74`** — the `HostedZoneNameServers` output description
-  reads "at Google"; the registrar is Network Solutions. Cosmetic, but it is the
-  string read during a nameserver migration.
-- **Deploy-role policy documents are not version controlled.** The role must be
-  created out-of-band (it is what grants CDK access in the first place), but the
-  trust and permissions JSON could live under `infra/bootstrap/` for
-  reproducibility.
+## Open items as of 2026-07-30
+Superseded where noted — see the follow-up section below.
+- ~~**SES sandbox status unconfirmed.** If the account is still in the sandbox,
+  the contact form can only deliver to verified addresses and genuine inquiries
+  fail silently.~~ **Resolved and the premise was wrong** — the account is in the
+  sandbox, but that does not affect the contact form. See the follow-up.
+- ~~**`infra/lib/dns-stack.ts:74`** reads "at Google"; the registrar is Network
+  Solutions.~~ **Fixed.**
+- **Deploy-role policy documents are not version controlled.** Still open. The
+  role must be created out-of-band (it is what grants CDK access in the first
+  place), but the trust and permissions JSON could live under `infra/bootstrap/`
+  for reproducibility.
+## Follow-up — 2026-07-31
+Work completed after the snapshot above. `README.md` and `DEPLOY.md` remain the
+maintained references; this section only records what changed and why.
+### Brand identity and palette
+The supplied logo and favicon assets replaced the placeholder blue-gradient
+artwork. The logo PNGs had opaque cream backgrounds rather than alpha, so each
+was keyed to transparency and cropped to its artwork before use.
+The design tokens were then retuned from the placeholder indigo to the logo's
+cyan and slate. The logo cyan (`#33c7df`) measures ~1.9:1 against white, so it
+cannot carry text or button fills; it sits at `brand-400` with the deeper shades
+derived along the same hue. All 14 token pairings the codebase actually uses
+were checked against WCAG AA and pass.
+### Open Graph card
+`og:image` pointed at an SVG, which LinkedIn, Facebook, X, and Slack do not
+render — link previews were broken everywhere. Replaced with a real 1200x630
+PNG generated from the logo. **Existing previews stay cached until re-scraped**
+via each platform's debugger.
+### Feature-branch workflow
+`ci.yml` now validates pull requests by building the site and synthesizing the
+CDK stacks. It holds no AWS credentials: the deploy role trusts only
+`refs/heads/main`, so a pull-request token cannot assume it. Branch protection
+is unavailable on this plan, so the included `pre-push` hook is an advisory
+guardrail rather than a control.
+### Contact recipient
+The live Lambda was mailing `hello@aitecxo.com` despite an earlier deploy that
+passed `-c contactToEmail=tim@aitecxo.com`. **CDK context is per-invocation and
+is not persisted in the stack**, so every CI deploy — which passes no context —
+silently reverted it. The value now lives in the default in
+`infra/bin/aitecxo.ts`. Delivery to `tim@aitecxo.com` is confirmed received.
+### Corrected: the SES sandbox is not a delivery risk
+The snapshot above, and repeated warnings during that session, claimed sandbox
+mode could make real inquiries fail silently. That was wrong. The form always
+sends **to** an `@aitecxo.com` address covered by the verified domain identity,
+and the visitor's address is only `Reply-To`, never a recipient. The genuine
+constraints are volume: 200 messages/day and a 1/sec send rate.
+### Asset weight
+The `public/` PNGs were full truecolour exports of flat two-colour artwork — the
+512px icon alone was 233kB. Re-encoded with a quantized palette and dithering
+disabled: **456kB to 111kB, ~75% smaller**, with deviation confined to a few
+antialiased edge pixels and no visible change at any display size. Dithering was
+disabled deliberately; the default stipples flat fills, which both looks worse
+under magnification and compresses less well.
+### Smaller fixes
+- The `HostedZoneNameServers` output described the registrar as "Google"; it is
+  Network Solutions. That string is read mid-nameserver-migration, so the wrong
+  name is worse than none.
+- Confirmed no references survive to the deleted `favicon.svg` / `og.svg`.
+### Still open
+- **`hello@` vs `tim@`.** `src/config.ts` advertises `hello@aitecxo.com`
+  publicly while the form delivers to `tim@aitecxo.com`. Either converge them or
+  confirm `hello@` is a monitored alias.
+- **SES production access** still not requested.
+- **Social preview caches** not yet re-scraped.
+- **`favicon.ico` is unoptimized** at 15kB, since `sharp` cannot write ICO.
