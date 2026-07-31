@@ -23,6 +23,11 @@ const {
 const siteOrigin = Astro.site ?? new URL(SITE.url);
 const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
 const canonical = new URL(Astro.url.pathname, siteOrigin).toString();
+// The 404 page is served at whatever path the visitor asked for, so its own
+// build path (/404/) is not a real address — advertising it as canonical points
+// crawlers at a URL that 404s. noindex pages therefore get no canonical, and
+// og:url falls back to the site root instead of a dead path.
+const shareUrl = noindex ? SITE.url : canonical;
 const ogImage = new URL(image, siteOrigin).toString();
 
 const orgJsonLd = {
@@ -52,7 +57,7 @@ const orgJsonLd = {
     <link rel="manifest" href="/site.webmanifest" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {!noindex && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#33c7df" />
     <meta name="generator" content={Astro.generator} />
@@ -62,7 +67,7 @@ const orgJsonLd = {
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={title ?? SITE.name} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    <meta property="og:url" content={shareUrl} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
