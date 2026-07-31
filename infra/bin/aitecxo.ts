@@ -7,7 +7,11 @@ import { ContactApiStack } from '../lib/contact-api-stack';
 const app = new App();
 
 const domainName = app.node.tryGetContext('domainName') || 'aitecxo.com';
-const contactToEmail = app.node.tryGetContext('contactToEmail') || `hello@${domainName}`;
+// These defaults are the effective configuration. CDK context is per-invocation
+// and is not persisted in the stack, so a one-off `-c contactToEmail=...` is
+// silently reverted by the next `cdk deploy` that omits it — including every CI
+// deploy. Change the default here rather than relying on a context override.
+const contactToEmail = app.node.tryGetContext('contactToEmail') || `tim@${domainName}`;
 const contactFromEmail = app.node.tryGetContext('contactFromEmail') || `no-reply@${domainName}`;
 
 // CloudFront and its ACM certificate must live in us-east-1.
