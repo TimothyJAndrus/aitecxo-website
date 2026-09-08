@@ -4,6 +4,7 @@ description: 'AWS just shipped CI quality gates for AI agents. The tooling is a 
 author: 'Timothy Andrus'
 publishDate: 2026-09-08
 tags: ['ai-operations', 'governance', 'agents']
+draft: true
 ---
 
 AWS published a reference implementation this week that most coverage filed under developer tooling: Bedrock AgentCore Evaluations wired into a GitHub Actions pipeline, scoring an agent's responses against a threshold and failing the pull request when quality drops below it. CDK templates, a working repo, a suggested bar of 0.8 out of 1.0.
