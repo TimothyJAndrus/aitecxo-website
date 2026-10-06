@@ -16,7 +16,7 @@ Built as a static [Astro](https://astro.build) site, hosted on AWS (S3 + CloudFr
 
 ## Project structure
 
-```
+```text
 .
 ├── src/
 │   ├── pages/         # Routes (home, services, about, work, insights, contact, pricing, faq)
@@ -212,10 +212,12 @@ The `$default` stage is throttled at **2 requests/second sustained, burst 5**, c
 - The limit applies **per stage across all callers**, not per IP. It caps total contact-form traffic; it does not single out an individual abuser.
 - Excess requests are rejected by API Gateway *before* reaching the Lambda, so they return API Gateway's error shape — `503 {"message":"Service Unavailable"}` with a `message` key — rather than the Lambda's `{"error":…}`. Note this is **503, not 429**. Client code should treat it as "retry in a moment," not a permanent failure.
 - Check the live values with:
+
   ```bash
   aws apigatewayv2 get-stages --api-id <api-id> --region us-east-1 \
     --query 'Items[].DefaultRouteSettings'
   ```
+
 - Adjust by editing `throttlingRateLimit` / `throttlingBurstLimit` and redeploying `AitecxoContactApiStack`.
 
 #### SES and recipients
@@ -226,6 +228,7 @@ The `$default` stage is throttled at **2 requests/second sustained, burst 5**, c
 - The sandbox caps volume at **200 messages/day** and a **1/sec** send rate. Note the API's own throttle allows 2 req/s, so two submissions landing in the same second can reach SES faster than the sandbox permits. The AWS SDK retries throttling errors by default (standard mode, 3 attempts with backoff), which comfortably absorbs a brief spike inside the Lambda's 10s timeout; only a sustained burst would exhaust the retries and surface as `502`. Requesting production access removes the cap and is the real fix if traffic ever justifies it.
 - Tail Lambda logs: `aws logs tail /aws/lambda/<function-name> --follow --region us-east-1` (find the name under the ContactApiStack resources).
 - Smoke-test the deployed endpoint end to end (this sends a real email):
+
   ```bash
   curl -sS -X POST "$(aws cloudformation describe-stacks --region us-east-1 \
     --stack-name AitecxoContactApiStack \
