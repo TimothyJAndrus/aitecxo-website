@@ -1,42 +1,52 @@
 @import "tailwindcss";
+@import "@fontsource-variable/sora";
 
 /*
- * AITeCXO design tokens (Tailwind v4 `@theme`).
- * Defining tokens here generates matching utilities, e.g. `bg-brand-600`,
- * `text-accent-500`, `font-sans`.
+ * AITeCXO design tokens (Tailwind v4 `@theme`), from the Brand Identity
+ * Guidelines v1.0 (public/brand/AITeCXO-Brand-Guidelines.pdf).
+ *
+ *   Ink         #12151C  primary: type, the mark's tile, dark backgrounds
+ *   Ember       #E0531F  accent: diamond, nodes, dots. ~5-10% of any layout
+ *   Mist Ground #F2F3F5  light background
+ *   Slate       #4A505E  secondary text on light backgrounds
+ *   Mist        #A9AEBA  secondary text on Ink
+ *
+ * Ember on white is only 3.9:1, so the guidelines restrict it to graphics and
+ * large type. Small Ember-coloured text uses ember-600 (#B8421A: 5.5:1 on
+ * white, 4.9:1 on Mist Ground), which keeps the hue and clears WCAG AA.
  */
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Sora Variable", "Sora", "Helvetica Neue", Arial, sans-serif;
+
+  /* Ink scale: 900 is brand Ink, 500 is brand Slate. */
+  --color-ink-900: #12151c;
+  --color-ink-800: #1e222b;
+  --color-ink-700: #2b303b;
+  --color-ink-500: #4a505e;
+
+  /* Ember accent. 500 is brand Ember. */
+  --color-ember-50: #fdf2ed;
+  --color-ember-100: #fbe0d4;
+  --color-ember-500: #e0531f;
+  --color-ember-600: #b8421a;
+  --color-ember-700: #9a3714;
 
   /*
-   * Primary brand — the logo cyan (#33c7df) sits at 400. It is far too light
-   * for text or button fills (~1.9:1 on white), so 600-950 are progressively
-   * deepened along the same hue to carry interactive and text roles. Every
-   * pairing the site actually uses clears WCAG AA; the tightest is
-   * accent-600 on white at 4.68:1.
+   * Tailwind's slate neutrals re-anchored on the brand, so every border and
+   * background utility lands on-palette: 50 = Mist Ground, 400 = Mist,
+   * 600 = Slate, 950 = Ink.
    */
-  --color-brand-50: #ecfafe;
-  --color-brand-100: #cff2fb;
-  --color-brand-200: #a6e7f5;
-  --color-brand-300: #6fd7ec;
-  --color-brand-400: #33c7df;
-  --color-brand-500: #17a8c2;
-  --color-brand-600: #0d879e;
-  --color-brand-700: #0e6b7e;
-  --color-brand-800: #125668;
-  --color-brand-900: #144756;
-  --color-brand-950: #082e3a;
-
-  /* Accent — the bright end of the same cyan, for highlights and small fills */
-  --color-accent-400: #33c7df;
-  --color-accent-500: #19b3cd;
-  --color-accent-600: #0b7f96;
-
-  /* Neutral ink — the slate from the logo wordmark (#414f5f) */
-  --color-ink-900: #1b232d;
-  --color-ink-700: #33404f;
-  --color-ink-500: #59677a;
+  --color-slate-50: #f2f3f5;
+  --color-slate-100: #e8eaee;
+  --color-slate-200: #dcdfe5;
+  --color-slate-300: #c5c9d1;
+  --color-slate-400: #a9aeba;
+  --color-slate-500: #7a8090;
+  --color-slate-600: #4a505e;
+  --color-slate-700: #363b46;
+  --color-slate-800: #22262f;
+  --color-slate-900: #181b22;
+  --color-slate-950: #12151c;
 }
 
 @layer base {
@@ -49,12 +59,51 @@
     @apply bg-white text-ink-700 antialiased;
   }
 
-  :where(a, button, input, textarea, select):focus-visible {
-    @apply outline-2 outline-offset-2 outline-brand-600;
+  h1,
+  h2 {
+    letter-spacing: -0.02em;
+  }
+
+  :where(a, button, input, textarea, select, summary):focus-visible {
+    @apply outline-2 outline-offset-2 outline-ember-600;
   }
 
   ::selection {
-    @apply bg-brand-600 text-white;
+    @apply bg-ink-900 text-white;
+  }
+}
+
+@layer components {
+  /*
+   * Eyebrow: Sora Medium, uppercase, tracked +240 (the tagline treatment in
+   * the guidelines), in Slate, led by the ember diamond from the mark.
+   */
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 text-xs font-medium uppercase text-ink-500;
+    letter-spacing: 0.24em;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply inline-block h-1.5 w-1.5 flex-none rotate-45 bg-ember-500;
+  }
+  .eyebrow-reversed {
+    @apply text-slate-400;
+  }
+
+  /* The ember diamond, used as a list bullet. */
+  .diamond {
+    @apply mt-2 inline-block h-1.5 w-1.5 flex-none rotate-45 bg-ember-500;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-ink-900 px-6 py-3 text-base font-semibold text-white shadow-sm transition-colors hover:bg-ink-700;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-6 py-3 text-base font-semibold text-ink-900 transition-colors hover:border-ink-900;
+  }
+
+  .link {
+    @apply font-semibold text-ember-600 transition-colors hover:text-ember-700;
   }
 }
 
@@ -76,10 +125,13 @@
     @apply mt-6 text-lg font-semibold text-ink-900;
   }
   .prose a {
-    @apply font-medium text-brand-700 underline underline-offset-2 hover:text-brand-800;
+    @apply font-medium text-ember-600 underline decoration-ember-500/40 underline-offset-2 hover:text-ember-700 hover:decoration-ember-600;
   }
   .prose ul {
     @apply list-disc space-y-2 pl-6;
+  }
+  .prose ul li::marker {
+    @apply text-ember-500;
   }
   .prose ol {
     @apply list-decimal space-y-2 pl-6;
@@ -88,7 +140,7 @@
     @apply font-semibold text-ink-900;
   }
   .prose blockquote {
-    @apply border-l-4 border-brand-200 pl-4 italic text-ink-500;
+    @apply border-l-4 border-ember-500 pl-4 italic text-ink-500;
   }
   .prose code {
     @apply rounded bg-slate-100 px-1.5 py-0.5 text-sm;
