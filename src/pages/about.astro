@@ -19,39 +19,77 @@ const values = [
     eyebrow="About"
     title="A practical partner for AI adoption"
     intro="AITeCXO helps organizations move past AI hype and into measurable results — combining hands-on engineering with senior technology leadership."
+    mark
   />
 
-  <div class="mx-auto max-w-3xl px-4 py-16 md:py-24">
-    <div class="prose">
-      <p>
-        AITeCXO is an AI consulting practice for SMB and enterprise teams that want to
-        innovate, implement, and integrate AI into how they actually work. We bring the
-        perspective of a hands-on engineer and the judgment of a technology executive to
-        every engagement.
-      </p>
-      <h2>Who we work with</h2>
-      <p>
-        We partner with leaders who are accountable for outcomes — founders, operators, and
-        technology executives — who want a trusted guide rather than a slide deck. Engagements
-        range from a focused discovery sprint to standing up production AI systems.
-      </p>
-      <h2>How we're different</h2>
-      <p>
-        Deep cloud and software engineering experience means we don't just advise — we build,
-        integrate, and hand over solutions your team can own. We're cloud-native by default,
-        with a bias toward secure, cost-aware architectures on AWS.
-      </p>
+  <div class="mx-auto max-w-6xl px-4 py-16 md:py-24">
+    <div class="grid gap-12 lg:grid-cols-[3fr_2fr]">
+      <div class="prose max-w-none">
+        <p class="text-lg">
+          AITeCXO is an AI consulting practice for SMB and enterprise teams that want to
+          innovate, implement, and integrate AI into how they actually work. We bring the
+          perspective of a hands-on engineer and the judgment of a technology executive to
+          every engagement.
+        </p>
+        <h2>Who we work with</h2>
+        <p>
+          We partner with leaders who are accountable for outcomes — founders, operators, and
+          technology executives — who want a trusted guide rather than a slide deck. Engagements
+          range from a focused discovery sprint to standing up production AI systems.
+        </p>
+        <h2>How we're different</h2>
+        <p>
+          Deep cloud and software engineering experience means we don't just advise — we build,
+          integrate, and hand over solutions your team can own. We're cloud-native by default,
+          with a bias toward secure, cost-aware architectures on AWS.
+        </p>
+      </div>
+
+      {/* The crossing the practice (and the mark) is built on. */}
+      <aside class="self-start rounded-3xl bg-ink-900 p-8 text-slate-400 lg:sticky lg:top-24">
+        <p class="eyebrow eyebrow-reversed">Where we sit</p>
+        <div class="mt-6 space-y-5">
+          <div class="flex items-start gap-4">
+            <span class="mt-2 h-1.5 w-10 flex-none rounded-full bg-white" aria-hidden="true"></span>
+            <p><span class="font-semibold text-white">Executive judgment.</span> What is worth building, in what order, and who owns it.</p>
+          </div>
+          <div class="flex items-start gap-4">
+            <span class="relative mt-2.5 h-px w-10 flex-none bg-ember-500" aria-hidden="true">
+              <span class="absolute -left-0.5 -top-[3px] h-[7px] w-[7px] rounded-full bg-ember-500"></span>
+              <span class="absolute -right-0.5 -top-[3px] h-[7px] w-[7px] rounded-full bg-ember-500"></span>
+            </span>
+            <p><span class="font-semibold text-white">Engineering hands.</span> Models, pipelines, and the cloud systems that do the work.</p>
+          </div>
+          <div class="flex items-start gap-4">
+            <span class="flex w-10 flex-none justify-center pt-1.5" aria-hidden="true">
+              <span class="h-2.5 w-2.5 rotate-45 bg-ember-500"></span>
+            </span>
+            <p><span class="font-semibold text-white">The point of value.</span> Where the two meet and strategy becomes a working system.</p>
+          </div>
+        </div>
+        <a href="/brand" class="mt-8 inline-flex items-center gap-1 text-sm font-semibold text-white transition-colors hover:text-ember-500">
+          Why the X? <span aria-hidden="true">&rarr;</span>
+        </a>
+      </aside>
     </div>
 
-    <div class="mt-12 grid gap-6 sm:grid-cols-2">
-      {
-        values.map((v) => (
-          <div class="rounded-2xl border border-slate-200 bg-white p-6">
-            <h3 class="text-lg font-semibold text-ink-900">{v.title}</h3>
-            <p class="mt-2 text-ink-500">{v.text}</p>
-          </div>
-        ))
-      }
+    <div class="mt-20">
+      <p class="eyebrow">What we value</p>
+      <h2 class="mt-4 text-3xl font-bold text-ink-900 md:text-4xl">Principles we work by</h2>
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          values.map((v, i) => (
+            <div class="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-colors hover:border-ink-900">
+              <p class="flex items-center gap-3 text-sm font-bold text-ink-900">
+                <span class="inline-block h-2 w-2 rotate-45 bg-ember-500" aria-hidden="true" />
+                0{i + 1}
+              </p>
+              <h3 class="mt-4 text-lg font-bold text-ink-900">{v.title}</h3>
+              <p class="mt-2 font-light text-ink-500">{v.text}</p>
+            </div>
+          ))
+        }
+      </div>
     </div>
   </div>
 

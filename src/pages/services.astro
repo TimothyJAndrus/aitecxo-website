@@ -3,6 +3,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import CTA from '../components/CTA.astro';
 import { SERVICES } from '../config';
+
+/*
+ * The three pillars are the brand tagline, in order:
+ * INNOVATE · IMPLEMENT · INTEGRATE. Each glyph highlights the part of the X
+ * that pillar corresponds to: the leadership bar (deciding what to build),
+ * the node line (the systems that do the work), and the ember diamond where
+ * they meet (value embedded in the business).
+ */
+const VERBS = ['Innovate', 'Implement', 'Integrate'];
 ---
 
 <BaseLayout
@@ -13,23 +22,48 @@ import { SERVICES } from '../config';
     eyebrow="Services"
     title="From AI strategy to production — and everything in between"
     intro="We offer three complementary services. Most engagements start with one and grow into the others as value is proven."
-  />
+    mark
+  >
+    <p class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium uppercase text-ink-500" style="letter-spacing: 0.24em;">
+      {
+        VERBS.map((v, i) => (
+          <>
+            {i > 0 && <span class="inline-block h-1.5 w-1.5 rounded-full bg-ember-500" aria-hidden="true" />}
+            <a href={`#${SERVICES[i].id}`} class="transition-colors hover:text-ink-900">{v}</a>
+          </>
+        ))
+      }
+    </p>
+  </PageHeader>
 
   <div class="mx-auto max-w-6xl px-4 py-16 md:py-24">
-    <div class="space-y-16">
+    <div class="space-y-6">
       {
         SERVICES.map((s, i) => (
-          <section id={s.id} class="scroll-mt-24 grid gap-8 md:grid-cols-3">
+          <section
+            id={s.id}
+            class="grid scroll-mt-24 gap-8 rounded-3xl border border-slate-200 bg-white p-6 transition-colors hover:border-ink-900 md:grid-cols-3 md:p-10"
+          >
             <div>
-              <p class="text-sm font-bold text-ember-600">0{i + 1}</p>
-              <h2 class="mt-2 text-2xl font-bold text-ink-900">{s.title}</h2>
+              <div class="flex items-center gap-4">
+                <svg viewBox="0 0 100 100" class="h-14 w-14 flex-none" aria-hidden="true">
+                  <rect width="100" height="100" rx="22" fill="#12151C" />
+                  <line x1="70" y1="30" x2="30" y2="70" stroke="#E0531F" stroke-width="4" stroke-linecap="round" opacity={i === 1 ? 1 : 0.3} />
+                  <line x1="29" y1="29" x2="71" y2="71" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" opacity={i === 0 ? 1 : 0.25} />
+                  <circle cx="70" cy="30" r="7.5" fill="#E0531F" opacity={i === 1 ? 1 : 0.3} />
+                  <circle cx="30" cy="70" r="7.5" fill="#E0531F" opacity={i === 1 ? 1 : 0.3} />
+                  <rect x="43" y="43" width="14" height="14" transform="rotate(45 50 50)" fill="#E0531F" stroke="#12151C" stroke-width="3" opacity={i === 2 ? 1 : 0.3} />
+                </svg>
+                <p class="eyebrow">0{i + 1} · {VERBS[i]}</p>
+              </div>
+              <h2 class="mt-6 text-2xl font-bold text-ink-900 md:text-3xl">{s.title}</h2>
               <p class="mt-2 font-semibold text-ink-700">{s.tagline}</p>
             </div>
-            <div class="md:col-span-2">
-              <p class="text-lg text-ink-500">{s.description}</p>
-              <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+            <div class="md:col-span-2 md:border-l md:border-slate-200 md:pl-10">
+              <p class="text-lg font-light text-ink-500">{s.description}</p>
+              <ul class="mt-6 grid gap-3 sm:grid-cols-3">
                 {s.points.map((p) => (
-                  <li class="flex items-start gap-3 text-ink-700">
+                  <li class="flex items-start gap-3 rounded-xl bg-slate-50 p-4 text-ink-700">
                     <span class="diamond" aria-hidden="true" />
                     <span>{p}</span>
                   </li>

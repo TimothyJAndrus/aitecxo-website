@@ -3,17 +3,45 @@ interface Props {
   eyebrow?: string;
   title: string;
   intro?: string;
+  /** Show the brand symbol beside the heading (lg+ only). */
+  mark?: boolean;
 }
-const { eyebrow, title, intro } = Astro.props;
+const { eyebrow, title, intro, mark = false } = Astro.props;
 ---
 
-<section class="border-b border-slate-200 bg-slate-50">
-  <div class="mx-auto max-w-6xl px-4 py-16 md:py-20">
-    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    <h1 class="mt-4 max-w-3xl text-4xl font-bold text-ink-900 md:text-5xl">
-      {title}
-    </h1>
-    {intro && <p class="mt-4 max-w-2xl text-lg font-light text-ink-500">{intro}</p>}
-    <slot />
+<section class="relative overflow-hidden border-b border-slate-200 bg-slate-50">
+  {/* Node-grid texture, as on the home hero. */}
+  <div
+    class="pointer-events-none absolute inset-0"
+    style="background-image: radial-gradient(circle at 1px 1px, rgb(18 21 28 / 0.07) 1px, transparent 0); background-size: 28px 28px; -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%); mask-image: linear-gradient(to bottom, black, transparent 85%);"
+    aria-hidden="true"
+  >
+  </div>
+  <div
+    class:list={[
+      'relative mx-auto max-w-6xl px-4 py-16 md:py-20',
+      mark && 'grid items-center gap-10 lg:grid-cols-[1fr_auto]',
+    ]}
+  >
+    <div>
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1 class="mt-4 max-w-3xl text-4xl font-bold text-ink-900 md:text-5xl">
+        {title}
+      </h1>
+      {intro && <p class="mt-4 max-w-2xl text-lg font-light text-ink-500">{intro}</p>}
+      <slot />
+    </div>
+    {
+      mark && (
+        <img
+          src="/brand/aitecxo-symbol-x.svg"
+          alt=""
+          width="208"
+          height="208"
+          class="hidden h-48 w-48 lg:block xl:h-52 xl:w-52"
+          loading="eager"
+        />
+      )
+    }
   </div>
 </section>
