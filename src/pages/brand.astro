@@ -1,0 +1,234 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTA from '../components/CTA.astro';
+
+/*
+ * The reasoning behind the identity, condensed from the Brand Identity
+ * Guidelines v1.0 (public/brand/AITeCXO-Brand-Guidelines.pdf). If the PDF is
+ * revised, update this page to match; the PDF is the source of truth.
+ */
+const PDF = '/brand/AITeCXO-Brand-Guidelines.pdf';
+
+const parts = [
+  {
+    name: 'The solid bar',
+    meaning: 'Leadership',
+    text: 'One heavy stroke, top-left to bottom-right. It stands for executive judgment: accountability, priorities, and the decision about what is worth building at all.',
+  },
+  {
+    name: 'The node line',
+    meaning: 'AI and systems',
+    text: 'A fine connector between two nodes, read as a network edge or a data path. It stands for models, pipelines, and the systems that do the work.',
+  },
+  {
+    name: 'The ember diamond',
+    meaning: 'The point of value',
+    text: 'Where the two cross. This is the moment strategy becomes a working system: the player-coach position the practice is built on, and the outcome clients pay for.',
+  },
+];
+
+const colors = [
+  { name: 'Ink', hex: '#12151C', role: 'Type, the mark’s tile, dark backgrounds. A blue-black reads richer than pure black and sits softer on screen.', swatch: 'bg-ink-900', dark: true },
+  { name: 'Ember', hex: '#E0531F', role: 'The diamond, the nodes, the tagline dots. Used sparingly, about 5–10% of any layout, so it always marks the point of value.', swatch: 'bg-ember-500', dark: true },
+  { name: 'Mist Ground', hex: '#F2F3F5', role: 'Light background. A cool off-white that keeps pages from glaring.', swatch: 'bg-slate-50', dark: false },
+  { name: 'Slate', hex: '#4A505E', role: 'Secondary text on light backgrounds. 7.3:1 on Mist Ground.', swatch: 'bg-ink-500', dark: true },
+  { name: 'Mist', hex: '#A9AEBA', role: 'Secondary text on Ink. 8.2:1, readable for body copy.', swatch: 'bg-slate-400', dark: false },
+];
+---
+
+<BaseLayout
+  title="Why the X? Our brand story"
+  description="The reasoning behind the AITeCXO identity: why everything meets at the X, what each part of the mark means, and why ember instead of blue."
+>
+  <section class="border-b border-slate-200 bg-slate-50">
+    <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 md:py-24 lg:grid-cols-[1fr_auto]">
+      <div>
+        <p class="eyebrow">Brand story</p>
+        <h1 class="mt-4 max-w-3xl text-4xl font-bold text-ink-900 md:text-6xl md:leading-[1.08]">
+          Everything meets at the X.
+        </h1>
+        <p class="mt-6 max-w-2xl text-lg font-light text-ink-500 md:text-xl">
+          AITeCXO sits where two disciplines usually stay apart: the judgment of a technology
+          executive and the hands of an engineer who builds. The identity is built on that
+          crossing. The X in CXO isn’t just a letter in the name. It is the brand, and every
+          other element comes from it.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href={PDF} class="btn-primary">Download the brand guidelines (PDF)</a>
+          <a href="/about" class="btn-secondary">About the practice</a>
+        </div>
+      </div>
+      <img
+        src="/brand/aitecxo-symbol-x.svg"
+        alt="The AITeCXO symbol: a heavy ink bar crossed by a fine ember node line, with an ember diamond where they meet."
+        width="300"
+        height="300"
+        class="mx-auto h-56 w-56 md:h-72 md:w-72"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <!-- The three parts of the X -->
+  <section class="mx-auto max-w-6xl px-4 py-16 md:py-24">
+    <div class="max-w-2xl">
+      <p class="eyebrow">The idea</p>
+      <h2 class="mt-4 text-3xl font-bold text-ink-900 md:text-4xl">Three strokes, one position</h2>
+      <p class="mt-4 text-lg font-light text-ink-500">
+        Each part of the symbol stands for one half of the work, and the place where they meet.
+      </p>
+    </div>
+    <ol class="mt-10 grid gap-6 md:grid-cols-3">
+      {
+        parts.map((p, i) => (
+          <li class="flex flex-col rounded-2xl border border-slate-200 bg-white p-6">
+            <svg viewBox="0 0 100 100" class="h-16 w-16" aria-hidden="true">
+              <line x1="86" y1="14" x2="14" y2="86" stroke="#E0531F" stroke-width="5" stroke-linecap="round" opacity={i === 1 ? 1 : 0.18} />
+              <line x1="14" y1="14" x2="86" y2="86" stroke="#12151C" stroke-width="17" stroke-linecap="round" opacity={i === 0 ? 1 : 0.12} />
+              <circle cx="86" cy="14" r="10" fill="#E0531F" opacity={i === 1 ? 1 : 0.18} />
+              <circle cx="14" cy="86" r="10" fill="#E0531F" opacity={i === 1 ? 1 : 0.18} />
+              <rect x="41" y="41" width="18" height="18" transform="rotate(45 50 50)" fill="#E0531F" opacity={i === 2 ? 1 : 0.18} />
+            </svg>
+            <p class="eyebrow mt-6">{p.meaning}</p>
+            <h3 class="mt-2 text-xl font-bold text-ink-900">{p.name}</h3>
+            <p class="mt-3 font-light text-ink-500">{p.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- The name -->
+  <section class="border-y border-slate-200 bg-slate-50">
+    <div class="mx-auto max-w-6xl px-4 py-16 md:py-24">
+      <div class="max-w-2xl">
+        <p class="eyebrow">The name</p>
+        <h2 class="mt-4 text-3xl font-bold text-ink-900 md:text-4xl">AI · Tech · CXO, without the dots</h2>
+      </div>
+      <img
+        src="/brand/aitecxo-wordmark-tagline.svg"
+        alt="AITeCXO wordmark with the tagline Innovate · Implement · Integrate"
+        width="520"
+        height="135"
+        class="mt-10 h-auto w-full max-w-md"
+        loading="lazy"
+      />
+      <div class="mt-10 grid gap-8 md:grid-cols-3">
+        <div>
+          <h3 class="text-lg font-bold text-ink-900">Casing is the reading guide</h3>
+          <p class="mt-2 font-light text-ink-500">
+            The name keeps its own casing: AITeCXO. Weight does the separating: <strong class="font-bold text-ink-900">AI</strong> in
+            bold, <span class="font-light text-ink-900">Te</span> in light, <strong class="font-bold text-ink-900">CXO</strong> in
+            bold. You read “AI · Tech · CXO” without dots or spaces breaking up the name.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-ink-900">The X is drawn, not typed</h3>
+          <p class="mt-2 font-light text-ink-500">
+            The X in CXO is the brand symbol, sized to the exact cap height of the type. That one
+            substitution ties the text logo to the mark, so either can stand alone and still feel
+            like the same brand.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-ink-900">The tagline names the work</h3>
+          <p class="mt-2 font-light text-ink-500">
+            Innovate · Implement · Integrate are the three service pillars on this site, in order.
+            The three I’s echo the AI at the front of the name, and the ember dots link the line
+            back to the diamond.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Color -->
+  <section class="mx-auto max-w-6xl px-4 py-16 md:py-24">
+    <div class="grid gap-10 lg:grid-cols-[2fr_3fr]">
+      <div>
+        <p class="eyebrow">Color</p>
+        <h2 class="mt-4 text-3xl font-bold text-ink-900 md:text-4xl">Why ember, not blue</h2>
+        <p class="mt-4 text-lg font-light text-ink-500">
+          Most AI and cloud brands use blue, so a blue logo blends into the category. Ember is
+          warm, confident, and easy to remember next to ink.
+        </p>
+        <p class="mt-4 text-lg font-light text-ink-500">
+          It works because it is rare. Ember marks one point, the place where strategy becomes a
+          working system, so we keep it to a small share of any page.
+        </p>
+      </div>
+      <ul class="grid gap-3 sm:grid-cols-2">
+        {
+          colors.map((c, i) => (
+            <li
+              class:list={[
+                'flex overflow-hidden rounded-2xl border border-slate-200 bg-white',
+                i === colors.length - 1 && 'sm:col-span-2',
+              ]}
+            >
+              <div class:list={['w-16 flex-none', c.swatch, !c.dark && 'border-r border-slate-200']} aria-hidden="true" />
+              <div class="p-4">
+                <p class="font-bold text-ink-900">
+                  {c.name} <span class="ml-1 font-mono text-xs font-normal text-ink-500">{c.hex}</span>
+                </p>
+                <p class="mt-1 text-sm font-light text-ink-500">{c.role}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Type and the small mark -->
+  <section class="bg-ink-900 text-slate-400">
+    <div class="mx-auto grid max-w-6xl gap-12 px-4 py-16 md:grid-cols-2 md:py-24">
+      <div>
+        <p class="eyebrow eyebrow-reversed">Typography</p>
+        <h2 class="mt-4 text-3xl font-bold text-white md:text-4xl">Sora, on purpose</h2>
+        <p class="mt-4 text-lg font-light">
+          Sora is a geometric sans with open shapes and even stroke widths. It stays crisp on
+          screens, pairs with the clean geometry of the X, and avoids the overused defaults that
+          make technology brands look interchangeable. It is free under the Open Font License, so
+          anyone on a team can install it.
+        </p>
+        <p class="mt-6 text-2xl text-white">
+          <span class="font-light">Light 300</span> ·
+          <span class="font-normal">Regular 400</span> ·
+          <span class="font-semibold">SemiBold 600</span> ·
+          <span class="font-bold">Bold 700</span>
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow eyebrow-reversed">The mark</p>
+        <h2 class="mt-4 text-3xl font-bold text-white md:text-4xl">Built to survive 16 pixels</h2>
+        <p class="mt-4 text-lg font-light">
+          The X sits in a rounded ink tile so it keeps a fixed, recognisable shape as an app icon,
+          favicon, or avatar. The 22% corner radius is soft enough to feel modern and firm enough
+          to stay a square at 16 px. Below about 32 px the diamond turns to mush, so the browser-tab
+          version drops it and thickens both strokes.
+        </p>
+        <div class="mt-6 flex items-end gap-6">
+          <img src="/brand/aitecxo-mark.svg" alt="Primary mark" width="64" height="64" class="h-16 w-16 rounded-[22%] ring-1 ring-white/15" loading="lazy" />
+          <img src="/brand/aitecxo-mark.svg" alt="" width="40" height="40" class="h-10 w-10 rounded-[22%] ring-1 ring-white/15" loading="lazy" />
+          <img src="/favicon.svg" alt="Small-size mark" width="24" height="24" class="h-6 w-6 rounded-[22%] ring-1 ring-white/15" loading="lazy" />
+          <img src="/favicon.svg" alt="" width="16" height="16" class="h-4 w-4" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-4 py-16 text-center md:py-20">
+    <p class="eyebrow">The full guide</p>
+    <h2 class="mt-4 text-2xl font-bold text-ink-900 md:text-3xl">Using the AITeCXO identity?</h2>
+    <p class="mt-4 font-light text-ink-500">
+      The guidelines cover lockups, clear space, minimum sizes, accessibility contrast, and the
+      file to use for every placement.
+    </p>
+    <a href={PDF} class="btn-primary mt-8">Download the brand guidelines (PDF, 400 KB)</a>
+  </section>
+
+  <div class="pb-16 md:pb-24">
+    <CTA />
+  </div>
+</BaseLayout>

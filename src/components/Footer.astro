@@ -1,25 +1,36 @@
 ---
-import { Image } from 'astro:assets';
 import { SITE, NAV, SOCIAL, SERVICES } from '../config';
-import wordmark from '../assets/wordmark.png';
 const year = new Date().getFullYear();
+const linkClass = 'text-sm text-slate-400 transition-colors hover:text-white';
 ---
 
-<footer class="mt-24 border-t border-slate-200 bg-slate-50">
-  <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-4 py-12 md:grid-cols-4">
-    <div class="col-span-2 md:col-span-1">
-      <Image src={wordmark} alt={SITE.name} height={24} densities={[1, 2]} class="h-6 w-auto" />
-      <p class="mt-2 max-w-xs text-sm text-ink-500">{SITE.tagline}</p>
-      <p class="mt-4 text-sm text-ink-500">{SITE.location}</p>
+{/*
+  Ink footer with the reversed horizontal-with-tagline lockup: the guidelines
+  name the tagline lockup as the website-footer logo, and the reversed file for
+  Ink backgrounds. Mist (slate-400) on Ink is 8.2:1.
+*/}
+<footer class="mt-24 bg-ink-900 text-slate-400">
+  <div class="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-4 py-14 md:grid-cols-5">
+    <div class="col-span-2">
+      <img
+        src="/brand/aitecxo-lockup-horizontal-tagline-reversed.svg"
+        alt={SITE.name}
+        width="260"
+        height="61"
+        class="h-auto w-[240px] md:w-[260px]"
+        loading="lazy"
+      />
+      <p class="mt-6 max-w-xs text-sm">{SITE.tagline}</p>
+      <p class="mt-3 text-sm">{SITE.location}</p>
     </div>
 
     <div>
-      <p class="text-sm font-semibold text-ink-900">Explore</p>
-      <ul class="mt-3 space-y-2">
+      <p class="eyebrow eyebrow-reversed">Explore</p>
+      <ul class="mt-4 space-y-2">
         {
           NAV.map((item) => (
             <li>
-              <a class="text-sm text-ink-500 hover:text-brand-700" href={item.href}>
+              <a class={linkClass} href={item.href}>
                 {item.label}
               </a>
             </li>
@@ -29,12 +40,12 @@ const year = new Date().getFullYear();
     </div>
 
     <div>
-      <p class="text-sm font-semibold text-ink-900">Services</p>
-      <ul class="mt-3 space-y-2">
+      <p class="eyebrow eyebrow-reversed">Services</p>
+      <ul class="mt-4 space-y-2">
         {
           SERVICES.map((s) => (
             <li>
-              <a class="text-sm text-ink-500 hover:text-brand-700" href={`/services#${s.id}`}>
+              <a class={linkClass} href={`/services#${s.id}`}>
                 {s.title}
               </a>
             </li>
@@ -44,22 +55,17 @@ const year = new Date().getFullYear();
     </div>
 
     <div>
-      <p class="text-sm font-semibold text-ink-900">Connect</p>
-      <ul class="mt-3 space-y-2">
+      <p class="eyebrow eyebrow-reversed">Connect</p>
+      <ul class="mt-4 space-y-2">
         <li>
-          <a class="text-sm text-ink-500 hover:text-brand-700" href={`mailto:${SITE.email}`}>
+          <a class={linkClass} href={`mailto:${SITE.email}`}>
             {SITE.email}
           </a>
         </li>
         {
           SOCIAL.map((s) => (
             <li>
-              <a
-                class="text-sm text-ink-500 hover:text-brand-700"
-                href={s.href}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
+              <a class={linkClass} href={s.href} rel="noopener noreferrer" target="_blank">
                 {s.label}
               </a>
             </li>
@@ -69,12 +75,22 @@ const year = new Date().getFullYear();
     </div>
   </div>
 
-  <div class="border-t border-slate-200">
+  <div class="border-t border-white/10">
     <div
-      class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-xs text-ink-500 sm:flex-row"
+      class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-6 text-xs sm:flex-row"
     >
       <p>&copy; {year} {SITE.legalName}. All rights reserved.</p>
-      <p>Built with Astro &amp; AWS · hosted on S3 + CloudFront.</p>
+      <p class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+        <a class="group inline-flex items-center gap-2 transition-colors hover:text-white" href="/brand">
+          <span class="inline-block h-1.5 w-1.5 rotate-45 bg-ember-500" aria-hidden="true"></span>
+          Why the X? Our brand story
+        </a>
+        <a
+          class="underline decoration-white/20 underline-offset-2 transition-colors hover:text-white"
+          href="/brand/AITeCXO-Brand-Guidelines.pdf"
+          >Brand guidelines (PDF)</a
+        >
+      </p>
     </div>
   </div>
 </footer>

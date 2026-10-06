@@ -1,24 +1,27 @@
 ---
-import { Image } from 'astro:assets';
 import { NAV, SITE } from '../config';
-import logoFull from '../assets/logo-full.png';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
 ---
 
-<header class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 backdrop-blur">
+<header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/90 backdrop-blur">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-    <a href="/" class="flex items-center gap-2" aria-label={`${SITE.name} home`}>
-      {/* Decorative: the link above already carries the accessible name. */}
-      <Image
-        src={logoFull}
+    {/*
+      Horizontal lockup, no tagline: the guidelines' choice for nav bars,
+      displayed at 40 px tall (see public/brand/AITeCXO-Brand-Guidelines.pdf).
+      Decorative: the link already carries the accessible name.
+    */}
+    <a href="/" class="flex items-center" aria-label={`${SITE.name} home`}>
+      <img
+        src="/brand/aitecxo-lockup-horizontal.svg"
         alt=""
-        height={32}
-        densities={[1, 2]}
+        width="170"
+        height="40"
+        class="h-9 w-auto md:h-10"
         loading="eager"
-        class="h-8 w-auto"
+        fetchpriority="high"
       />
     </a>
 
@@ -29,19 +32,23 @@ const isActive = (href: string) =>
             href={item.href}
             aria-current={isActive(item.href) ? 'page' : undefined}
             class:list={[
-              'rounded-md px-3 py-2 text-sm font-medium transition-colors',
-              isActive(item.href)
-                ? 'text-brand-700'
-                : 'text-ink-500 hover:text-brand-700',
+              'relative rounded-md px-3 py-2 text-sm font-medium transition-colors',
+              isActive(item.href) ? 'text-ink-900' : 'text-ink-500 hover:text-ink-900',
             ]}
           >
             {item.label}
+            {isActive(item.href) && (
+              <span
+                class="absolute -bottom-0.5 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rotate-45 bg-ember-500"
+                aria-hidden="true"
+              />
+            )}
           </a>
         ))
       }
       <a
         href="/contact"
-        class="ml-2 rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-800"
+        class="ml-2 rounded-lg bg-ink-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-ink-700"
         >Get in touch</a
       >
     </nav>
@@ -49,7 +56,7 @@ const isActive = (href: string) =>
     <button
       type="button"
       id="menu-toggle"
-      class="inline-flex items-center justify-center rounded-md p-2 text-ink-700 md:hidden"
+      class="inline-flex items-center justify-center rounded-md p-2 text-ink-900 md:hidden"
       aria-controls="mobile-menu"
       aria-expanded="false"
     >
@@ -69,7 +76,7 @@ const isActive = (href: string) =>
             aria-current={isActive(item.href) ? 'page' : undefined}
             class:list={[
               'rounded-md px-3 py-2 text-base font-medium',
-              isActive(item.href) ? 'bg-brand-50 text-brand-700' : 'text-ink-700 hover:bg-slate-50',
+              isActive(item.href) ? 'bg-slate-50 text-ink-900' : 'text-ink-700 hover:bg-slate-50',
             ]}
           >
             {item.label}
@@ -78,7 +85,7 @@ const isActive = (href: string) =>
       }
       <a
         href="/contact"
-        class="mt-1 rounded-lg bg-brand-700 px-4 py-2 text-center text-base font-semibold text-white"
+        class="mt-1 rounded-lg bg-ink-900 px-4 py-2 text-center text-base font-semibold text-white"
         >Get in touch</a
       >
     </nav>

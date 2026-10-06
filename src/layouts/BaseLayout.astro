@@ -51,6 +51,8 @@ const orgJsonLd = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <!-- Small-size mark: no diamond, heavier strokes, per the guidelines for <=32 px. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -59,7 +61,7 @@ const orgJsonLd = {
     <meta name="description" content={description} />
     {!noindex && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <meta name="theme-color" content="#33c7df" />
+    <meta name="theme-color" content="#12151C" />
     <meta name="generator" content={Astro.generator} />
 
     <!-- Open Graph -->
@@ -92,7 +94,7 @@ const orgJsonLd = {
   <body class="flex min-h-screen flex-col">
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-brand-700 focus:px-4 focus:py-2 focus:text-white"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-ink-900 focus:px-4 focus:py-2 focus:text-white"
       >Skip to content</a
     >
     <Header />

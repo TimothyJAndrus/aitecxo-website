@@ -161,9 +161,14 @@ Note that `src/config.ts` holds the **publicly displayed** address, while the ad
 
 ### Replace the brand assets
 
-Logo sources live in `src/assets/` (Astro optimizes them to WebP at build time); icons, the manifest, and the OG card are static files in `public/`.
+The identity follows the **AITeCXO Brand Identity Guidelines v1.0**, published at [`public/brand/AITeCXO-Brand-Guidelines.pdf`](public/brand/AITeCXO-Brand-Guidelines.pdf) and explained in plain language at [`/brand`](src/pages/brand.astro) (linked from the footer). The PDF is the source of truth; if it is revised, update `/brand` and the tokens in `src/styles/global.css` to match.
 
-The PNGs in `public/` are **palette-encoded with dithering disabled**, which suits flat two-colour artwork and cut them by ~75% (456kB to 111kB) with no visible change. A fresh export from a favicon generator will be full truecolour and several times larger, so re-optimize after replacing them rather than committing the raw export.
+- **Logos** are the supplied SVGs, unmodified, in `public/brand/`: the horizontal lockup in the nav, the reversed lockup with tagline in the Ink footer, and the symbol in the hero. The guidelines forbid rebuilding lockups by hand, so replace the files rather than editing paths.
+- **Favicon** `public/favicon.svg` is the *small-size* mark (no diamond, heavier strokes), which the guidelines require at 32 px and below.
+- **Palette**: Ink `#12151C`, Ember `#E0531F`, Mist Ground `#F2F3F5`, Slate `#4A505E`, Mist `#A9AEBA`. Tailwind's `slate-*` scale is re-anchored onto these, so stock `border-slate-200` / `bg-slate-50` utilities stay on-brand. Ember on white is 3.9:1, below AA for body text, so small ember text uses `ember-600` (`#B8421A`, 5.5:1).
+- **Type** is Sora, self-hosted via `@fontsource-variable/sora` (no Google Fonts request).
+
+The PNGs in `public/` are **palette-encoded with dithering disabled**, which suits flat artwork and cut them by ~65–75% with no visible change. A fresh export from the brand pack or a favicon generator will be full truecolour and several times larger, so re-optimize after replacing them rather than committing the raw export.
 
 ### Contact API
 
