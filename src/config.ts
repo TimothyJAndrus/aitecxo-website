@@ -70,3 +70,105 @@ export const SERVICES = [
     ],
   },
 ] as const;
+
+/**
+ * Service families beyond the three AI pillars. Each item has a stable `id`
+ * (used as an anchor on /services and linked from /pricing) and a public
+ * "from" price. Keep prices in sync with the rate card on /pricing.
+ */
+export const SERVICE_FAMILIES = [
+  {
+    id: 'leadership',
+    title: 'Leadership & Change',
+    intro: 'Coaching and consulting for the people side of transformation: leaders, teams, and the organization around them.',
+    items: [
+      {
+        id: 'executive-coaching',
+        title: 'Executive Coaching',
+        description: 'One-to-one and team coaching on executive presence, navigating organizational politics, 60-day plans, 360° reviews, and accelerating momentum in a new role.',
+        from: 'Programs from $2,400',
+      },
+      {
+        id: 'business-consulting',
+        title: 'Business Consulting',
+        description: 'Operating-model, technology, and cost strategy from a leader who has run a 213-person organization and a $13.5M budget, not a slide factory.',
+        from: 'Engagements from $6,500',
+      },
+      {
+        id: 'change-management',
+        title: 'Change Management',
+        description: 'Readiness assessments, stakeholder maps, communication plans, and adoption metrics so new systems and AI tools actually get used.',
+        from: 'From $6,500',
+      },
+      {
+        id: 'training',
+        title: 'Training',
+        description: 'Hands-on workshops for executives and teams: practical AI, cloud fundamentals, and leadership skills, tailored to your tools and your work.',
+        from: 'Workshops from $2,500',
+      },
+      {
+        id: 'project-management',
+        title: 'Project Management',
+        description: 'Delivery leadership for technology programs: scope, plan, risks, vendors, and status that executives can trust.',
+        from: 'From $4,500/mo',
+      },
+    ],
+  },
+  {
+    id: 'software',
+    title: 'Software & Cloud',
+    intro: 'Senior engineering for the systems your business runs on, built in your cloud and handed over cleanly.',
+    items: [
+      {
+        id: 'application-development',
+        title: 'Application Development',
+        description: 'Web applications and internal tools, from a fixed-price blueprint to a production release your team can own.',
+        from: 'Builds from $8,000',
+      },
+      {
+        id: 'cloud-application-development',
+        title: 'Cloud Application Development',
+        description: 'Cloud-native applications and data platforms on AWS and Google Cloud: serverless, containers, and managed data services, designed for cost and reliability.',
+        from: 'Blueprint $1,800 · builds from $8,000',
+      },
+      {
+        id: 'custom-software-development',
+        title: 'Custom Software Development',
+        description: 'Software built around your process instead of the other way around: integrations, automations, and APIs that connect the systems you already have.',
+        from: 'From $175/hr or fixed price',
+      },
+      {
+        id: 'software-testing',
+        title: 'Software Testing',
+        description: 'Test strategy, automated test suites, and evaluation gates for AI-written code, so customers stop being your QA team.',
+        from: 'Test audit from $3,500',
+      },
+    ],
+  },
+  {
+    id: 'data',
+    title: 'Data & Information',
+    intro: 'The foundation every AI and analytics effort depends on.',
+    items: [
+      {
+        id: 'information-management',
+        title: 'Information Management',
+        description: 'Data governance, quality, lineage, and access controls, plus the pipelines and analytics that turn records into decisions, including regulated data (HIPAA, FERPA, SOC 2).',
+        from: 'Assessment from $6,500',
+      },
+    ],
+  },
+] as const;
+
+/** Topics offered in the contact form. Order = display order. */
+export const CONTACT_TOPICS = [
+  'AI strategy or implementation',
+  'Executive coaching',
+  'Business consulting / change management',
+  'Training or workshop',
+  'Project management',
+  'Application or cloud development',
+  'Software testing',
+  'Information management',
+  'Something else',
+] as const;
