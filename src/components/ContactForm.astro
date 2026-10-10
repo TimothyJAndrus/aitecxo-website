@@ -1,5 +1,5 @@
 ---
-import { SITE } from '../config';
+import { SITE, CONTACT_TOPICS } from '../config';
 const apiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? '';
 ---
 
@@ -46,6 +46,17 @@ const apiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? '';
       autocomplete="organization"
       class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-ink-900 shadow-sm focus:border-ink-900"
     />
+  </div>
+
+  <div>
+    <label for="cf-topic" class="block text-sm font-medium text-ink-900">What are you interested in?</label>
+    <select
+      id="cf-topic"
+      name="topic"
+      class="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-ink-900 shadow-sm focus:border-ink-900"
+    >
+      {CONTACT_TOPICS.map((t) => <option value={t}>{t}</option>)}
+    </select>
   </div>
 
   <div>
@@ -101,7 +112,9 @@ const apiUrl = import.meta.env.PUBLIC_CONTACT_API_URL ?? '';
 
     const name = (data.get('name') as string)?.trim();
     const from = (data.get('email') as string)?.trim();
-    const message = (data.get('message') as string)?.trim();
+    const topic = ((data.get('topic') as string) || '').trim();
+    const rawMessage = (data.get('message') as string)?.trim();
+    const message = rawMessage && topic ? `[${topic}]\n\n${rawMessage}` : rawMessage;
     if (!name || !from || !message) {
       setStatus('Please complete your name, email, and message.', false);
       return;

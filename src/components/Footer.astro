@@ -1,5 +1,5 @@
 ---
-import { SITE, NAV, SOCIAL, SERVICES } from '../config';
+import { SITE, NAV, SOCIAL, SERVICES, SERVICE_FAMILIES } from '../config';
 const year = new Date().getFullYear();
 const linkClass = 'text-sm text-slate-400 transition-colors hover:text-white';
 ---
@@ -47,6 +47,15 @@ const linkClass = 'text-sm text-slate-400 transition-colors hover:text-white';
             <li>
               <a class={linkClass} href={`/services#${s.id}`}>
                 {s.title}
+              </a>
+            </li>
+          ))
+        }
+        {
+          SERVICE_FAMILIES.map((f) => (
+            <li>
+              <a class={linkClass} href={`/services#${f.id}`}>
+                {f.title}
               </a>
             </li>
           ))

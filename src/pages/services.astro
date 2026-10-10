@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import CTA from '../components/CTA.astro';
-import { SERVICES } from '../config';
+import { SERVICES, SERVICE_FAMILIES } from '../config';
 
 /*
  * The three pillars are the brand tagline, in order:
@@ -16,12 +16,12 @@ const VERBS = ['Innovate', 'Implement', 'Integrate'];
 
 <BaseLayout
   title="Services"
-  description="AI innovation, implementation, and integration services for SMB and enterprise teams."
+  description="AI strategy and delivery, executive coaching, business consulting, change management, training, project management, application and cloud development, software testing, and information management."
 >
   <PageHeader
     eyebrow="Services"
     title="From AI strategy to production — and everything in between"
-    intro="We offer three complementary services. Most engagements start with one and grow into the others as value is proven."
+    intro="Three AI pillars at the core, plus the leadership, software, and data services that make them stick. Most engagements start with one and grow into the others as value is proven."
     mark
   >
     <p class="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium uppercase text-ink-500" style="letter-spacing: 0.24em;">
@@ -69,6 +69,46 @@ const VERBS = ['Innovate', 'Implement', 'Integrate'];
                   </li>
                 ))}
               </ul>
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+
+
+  <div class="mx-auto max-w-6xl px-4 pb-16 md:pb-24">
+    <div class="mb-10 border-t border-slate-200 pt-12">
+      <p class="eyebrow">Beyond the pillars</p>
+      <h2 class="mt-3 text-3xl font-bold text-ink-900 md:text-4xl">Leadership, software, and data services</h2>
+      <p class="mt-3 max-w-3xl text-lg font-light text-ink-500">
+        AI changes how work gets done. These services cover the people, systems, and information around it. Published prices are starting points; every engagement is scoped to your goals.
+      </p>
+      <nav class="mt-6 flex flex-wrap gap-2" aria-label="Service families">
+        {SERVICE_FAMILIES.map((f) => (
+          <a href={`#${f.id}`} class="rounded-full border border-slate-300 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:border-ink-900 hover:text-ink-900">{f.title}</a>
+        ))}
+      </nav>
+    </div>
+
+    <div class="space-y-14">
+      {
+        SERVICE_FAMILIES.map((f) => (
+          <section id={f.id} class="scroll-mt-24">
+            <div class="flex items-center gap-3">
+              <span class="diamond" aria-hidden="true" />
+              <h3 class="text-2xl font-bold text-ink-900">{f.title}</h3>
+            </div>
+            <p class="mt-2 max-w-3xl text-ink-500">{f.intro}</p>
+            <div class:list={['mt-6 grid gap-5 md:grid-cols-2', f.items.length === 4 ? 'lg:grid-cols-2' : f.items.length === 1 ? 'lg:grid-cols-1 lg:max-w-3xl' : 'lg:grid-cols-3']}>
+              {f.items.map((it) => (
+                <article id={it.id} class="flex scroll-mt-24 flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-colors hover:border-ink-900">
+                  <h4 class="text-lg font-semibold text-ink-900">{it.title}</h4>
+                  <p class="mt-2 flex-1 text-ink-500">{it.description}</p>
+                  <p class="mt-4 text-sm font-semibold text-ember-600">{it.from}</p>
+                  <a href="/contact" class="mt-3 text-sm font-semibold text-ink-900 underline decoration-ember-500 decoration-2 underline-offset-4 hover:text-ink-700">Start a conversation →</a>
+                </article>
+              ))}
             </div>
           </section>
         ))
