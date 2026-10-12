@@ -1,5 +1,5 @@
 ---
-import { NAV, SITE } from '../config';
+import { NAV, SITE, bookingUrl } from '../config';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) =>
@@ -47,9 +47,11 @@ const isActive = (href: string) =>
         ))
       }
       <a
-        href="/contact"
+        href={bookingUrl('header')}
+        target="_blank"
+        rel="noopener"
         class="ml-2 rounded-lg bg-ink-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-ink-700"
-        >Get in touch</a
+        >Book a call</a
       >
     </nav>
 
@@ -84,9 +86,11 @@ const isActive = (href: string) =>
         ))
       }
       <a
-        href="/contact"
+        href={bookingUrl('header-mobile')}
+        target="_blank"
+        rel="noopener"
         class="mt-1 rounded-lg bg-ink-900 px-4 py-2 text-center text-base font-semibold text-white"
-        >Get in touch</a
+        >Book a call</a
       >
     </nav>
   </div>

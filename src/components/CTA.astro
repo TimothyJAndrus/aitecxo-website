@@ -1,4 +1,6 @@
 ---
+import { bookingUrl } from '../config';
+
 interface Props {
   title?: string;
   text?: string;
@@ -8,8 +10,8 @@ interface Props {
 const {
   title = 'Ready to put AI to work?',
   text = 'Book a free 30-minute discovery call and we’ll map the highest-value opportunities for your team.',
-  buttonLabel = 'Start a conversation',
-  buttonHref = '/contact',
+  buttonLabel = 'Book a free discovery call',
+  buttonHref = bookingUrl('cta'),
 } = Astro.props;
 ---
 
@@ -27,9 +29,14 @@ const {
     <p class="mx-auto mt-4 max-w-2xl text-lg font-light text-slate-400">{text}</p>
     <a
       href={buttonHref}
+      target={buttonHref.startsWith('http') ? '_blank' : undefined}
+      rel={buttonHref.startsWith('http') ? 'noopener' : undefined}
       class="mt-8 inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 text-base font-semibold text-ink-900 shadow-sm transition-colors hover:bg-slate-100"
     >
       {buttonLabel}
     </a>
+    <p class="mt-4 text-sm text-slate-400">
+      or <a href="/contact" class="font-medium text-white underline decoration-ember-500 decoration-2 underline-offset-4 hover:text-slate-200">send us a message</a>
+    </p>
   </div>
 </section>
