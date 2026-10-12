@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import ContactForm from '../components/ContactForm.astro';
-import { SITE } from '../config';
+import { SITE, bookingUrl } from '../config';
 ---
 
 <BaseLayout
@@ -21,6 +21,17 @@ import { SITE } from '../config';
         <ContactForm />
       </div>
       <aside class="md:col-span-2">
+        <div class="mb-6 rounded-2xl border border-ink-900 bg-white p-6 ring-1 ring-ink-900">
+          <h2 class="text-lg font-semibold text-ink-900">Skip the back-and-forth</h2>
+          <p class="mt-2 text-ink-500">Pick a time that works for you. The first call is free, 30 minutes, by video.</p>
+          <a
+            href={bookingUrl('contact')}
+            target="_blank"
+            rel="noopener"
+            class="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-ink-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-ink-700"
+            >Book a free discovery call</a
+          >
+        </div>
         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
           <h2 class="text-lg font-semibold text-ink-900">Prefer email?</h2>
           <p class="mt-2 text-ink-500">
@@ -32,7 +43,7 @@ import { SITE } from '../config';
           <h3 class="mt-6 text-sm font-semibold text-ink-900">What happens next?</h3>
           <ol class="mt-2 space-y-2 text-sm text-ink-500">
             <li>1. We review your message and reply within one business day.</li>
-            <li>2. We schedule a free 30-minute discovery call.</li>
+            <li>2. We hold a free 30-minute discovery call (or book it yourself above).</li>
             <li>3. We propose a right-sized way to move forward.</li>
           </ol>
           <p class="mt-6 text-sm text-ink-500">{SITE.location}</p>

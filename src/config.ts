@@ -8,6 +8,8 @@ export const SITE = {
   description:
     'AITeCXO helps SMB and enterprise teams innovate, implement, and integrate AI into their business — from strategy and roadmaps to production-ready solutions.',
   email: 'hello@aitecxo.com',
+  /** Free 30-minute discovery call (Calendly). */
+  booking: 'https://calendly.com/tim-aitecxo/30min',
   location: 'Remote-first · United States',
 } as const;
 
@@ -159,6 +161,10 @@ export const SERVICE_FAMILIES = [
     ],
   },
 ] as const;
+
+/** Calendly link tagged with where on the site it was clicked (shows in Calendly's UTM report). */
+export const bookingUrl = (placement: string) =>
+  `${SITE.booking}?utm_source=aitecxo.com&utm_medium=website&utm_content=${encodeURIComponent(placement)}`;
 
 /** Topics offered in the contact form. Order = display order. */
 export const CONTACT_TOPICS = [
