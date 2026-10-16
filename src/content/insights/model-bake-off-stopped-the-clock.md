@@ -4,7 +4,9 @@ description: 'A stronger model beat a faster one on paused tasks and lost when t
 author: 'Timothy Andrus'
 publishDate: 2026-10-16
 tags: ['ai-operations', 'evaluation', 'agents', 'strategy']
-draft: true
+image: '/insights/model-bake-off-stopped-the-clock.jpg'
+imageAlt: 'Abstract illustration of two runners on a track beneath a frozen stopwatch'
+draft: false
 ---
 
 Your team picked its AI model by giving each candidate the same questions and grading the answers. Nobody graded how long the answers took, because the test stood still while the models thought.

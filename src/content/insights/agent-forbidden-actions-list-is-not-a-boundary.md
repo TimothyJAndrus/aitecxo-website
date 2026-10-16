@@ -4,7 +4,9 @@ description: 'Anthropic''s agents submitted real forms they were never meant to 
 author: 'Timothy Andrus'
 publishDate: 2026-10-12
 tags: ['ai-operations', 'agents', 'governance', 'security']
-draft: true
+image: '/insights/agent-forbidden-actions-list-is-not-a-boundary.jpg'
+imageAlt: 'Abstract illustration of one closed door surrounded by many open doors'
+draft: false
 ---
 
 Your cloud team would never approve an access policy that says "allow everything except these five actions." Your AI agent's instructions almost certainly say exactly that.
