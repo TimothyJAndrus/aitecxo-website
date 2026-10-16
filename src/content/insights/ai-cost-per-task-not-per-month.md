@@ -4,7 +4,9 @@ description: 'Mid-market AI budgets are approved in dollars per month and spent 
 author: 'Timothy Andrus'
 publishDate: 2026-09-16
 tags: ['ai-operations', 'cost-management', 'strategy']
-draft: true
+image: '/insights/ai-cost-per-task-not-per-month.jpg'
+imageAlt: 'Abstract illustration of a gauge filled with tokens, with one token pulled out and highlighted'
+draft: false
 ---
 
 Ask your CFO what your AI assistant costs per month and you will get a number. Ask what it costs to answer one customer question and the room goes quiet.

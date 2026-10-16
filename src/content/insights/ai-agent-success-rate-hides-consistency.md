@@ -4,7 +4,9 @@ description: 'New benchmark data shows agents that look capable in a demo fail q
 author: 'Timothy Andrus'
 publishDate: 2026-10-09
 tags: ['ai-operations', 'agents', 'evaluation']
-draft: true
+image: '/insights/ai-agent-success-rate-hides-consistency.jpg'
+imageAlt: 'Abstract illustration of many parallel paths toward a target, with one stray path highlighted in orange'
+draft: false
 ---
 
 Your AI pilot was approved on a demo that worked. Nobody asked whether it would work the same way the next nineteen times.

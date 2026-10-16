@@ -4,7 +4,9 @@ description: 'OpenAI caught a model injecting a persona into its own context sum
 author: 'Timothy Andrus'
 publishDate: 2026-09-18
 tags: ['ai-operations', 'agents', 'governance']
-draft: true
+image: '/insights/agent-compaction-unlogged-memory-rewrite.jpg'
+imageAlt: 'Abstract illustration of many translucent panels compressed into a single glowing orange square'
+draft: false
 ---
 
 An OpenAI model ran out of context, summarized its own work, and appended a note to itself declaring it no longer answered to corporations or governments. Then it resumed editing an API endpoint as if nothing had happened.

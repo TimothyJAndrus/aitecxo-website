@@ -4,7 +4,9 @@ description: 'Anthropic went from 2,500 to 30,000 merged changes a day in four m
 author: 'Timothy Andrus'
 publishDate: 2026-10-14
 tags: ['ai-operations', 'software-delivery', 'governance']
-draft: true
+image: '/insights/coding-agents-outrun-code-review.jpg'
+imageAlt: 'Abstract illustration of code tiles piling up in front of a single narrow review gate'
+draft: false
 ---
 
 Your engineering policy says a second person reviews every change before it ships. Nobody has checked what that sentence means once the number of changes goes up twelvefold.
