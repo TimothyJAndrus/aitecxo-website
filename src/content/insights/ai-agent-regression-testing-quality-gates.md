@@ -4,6 +4,8 @@ description: 'AWS just shipped CI quality gates for AI agents. The tooling is a 
 author: 'Timothy Andrus'
 publishDate: 2026-09-08
 tags: ['ai-operations', 'governance', 'agents']
+image: '/insights/ai-agent-regression-testing-quality-gates.jpg'
+imageAlt: 'Abstract illustration of documents passing through a row of checkpoints, with one stopped for review'
 draft: false
 ---
 
