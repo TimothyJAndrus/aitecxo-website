@@ -39,11 +39,11 @@ I run a personal agent every day, and it has earned each of those rules the hard
 
 It once told me a family medical report had been sent. Nothing had gone out. It wasn't lying in any human sense; it reported what it intended as what it had done. The fix was mechanical: it may only report a delivery when the system hands back proof, a message ID. It hasn't happened since.
 
-Another time I asked it to tighten its own safety settings, and the platform refused to let it edit its own configuration. I was briefly annoyed, then relieved. An agent that can loosen its guardrails because it was asked nicely can loosen them for any reason at all. The rule has to cut both ways.
+Another time I asked it to tighten its own safety settings, and the platform refused to let it edit its own configuration, even to make it safer. I had to make the change myself. An agent that can loosen its guardrails because it was asked nicely can loosen them for any reason at all. The rule has to cut both ways.
 
 And a bug in its own code wiped my follow-up list. It caught the loss, told me without being asked, restored the list and added a backup. That is the behavior you want, and it happened because the system kept a record it could restore from.
 
-I still have gaps. It runs directly on my laptop with no sandbox yet, and some long-lived credentials still sit in files. I'm closing both. I'd rather tell you that than pretend my setup is finished, because the companies that got burned this summer were the ones who believed theirs was.
+I still have gaps. It runs directly on my laptop with no sandbox yet, and some long-lived credentials still sit in files. I've already removed a few risky commands I had pre-approved for convenience, and I'm closing the other two. I'd rather tell you that than pretend my setup is finished, because the companies that got burned this summer were the ones who believed theirs was.
 
 Underdog made a promise. You don't need one. There's no need to fear when you've built the gates.
 
