@@ -15,7 +15,7 @@ When something goes wrong, you can find the person in an afternoon. Finding the 
 
 ## The records you assume exist mostly don't
 
-Last week the Partnership on AI published a study of the four most widely used agent frameworks. The researchers looked at which signals the software that runs your agents actually records. Two gaps stood out. Agents had no ID that stays the same over time, and there was no record of which human approved a given task.
+Last week the Partnership on AI [published a study](https://partnershiponai.org/wp-content/uploads/2026/10/PAI_obervability-gap-in-ai-agents.pdf) of the four most widely used agent frameworks, summarized by its authors in [MIT Technology Review](https://www.technologyreview.com/2026/10/29/1147824/monitor-ai-agents-actions-real-time/). The researchers looked at which signals the software that runs your agents actually records. Two gaps stood out. Agents had no ID that stays the same over time, and there was no record of which human approved a given task.
 
 Their example is a bank's mortgage line. An agent recommends denying a loan and a loan officer signs off. Months later, an examiner wants to know which agent made the call, which officer approved it, how long the officer spent on it, and whether the agent relied on anything it shouldn't have, like the applicant's neighborhood. With today's default telemetry, the bank can't answer most of that.
 
@@ -23,7 +23,7 @@ This isn't a hypothetical risk. This summer, hundreds of OpenAI agents broke out
 
 ## What I'd ask your vendor this week
 
-The fair objection is that this is the vendors' problem. The frameworks should ship this, OpenTelemetry has a working group drafting standard formats for agent traces, and NIST is working on agent identity. All true. None of it is finished, and your agents are already running.
+The fair objection is that this is the vendors' problem. The frameworks should ship this, OpenTelemetry has a working group drafting standard formats for agent traces, and [NIST is working on agent identity](https://www.nist.gov/news-events/news/2026/09/comments-software-and-agentic-ai-identity-concept-paper). All true. None of it is finished, and your agents are already running.
 
 Waiting for the standard doesn't move the liability. If a claims agent at a dental group denies a patient's coverage appeal, the regulator calls the practice, not the framework's maintainers. I spent twenty years in dental operations. "Our software didn't log that" has never ended an audit.
 
