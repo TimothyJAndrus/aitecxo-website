@@ -9,6 +9,12 @@ const values = [
   { title: 'Transparent & measurable', text: 'Every solution ships with evaluation and monitoring so you can trust what it does.' },
   { title: 'Enable your team', text: 'We transfer knowledge as we go, so your people can own and extend what we build.' },
 ];
+const stack = [
+  { name: 'agent-credential-broker', question: 'What can the agent access?', text: 'Credentials scoped to one action on one resource, valid for minutes, with human approval for risky requests.' },
+  { name: 'agent-guardrails', question: 'What can it do, and who approved it?', text: 'A policy check on every tool call: allow, deny, or wait for a human. Every step lands in an audit trail you can replay.' },
+  { name: 'agent-trap-evals', question: 'Is its output true?', text: 'Tests built from real agent mistakes, where a shallow check passes and a deeper one fails.' },
+  { name: 'note-taking-service', question: 'Does it hold up in a real app?', text: 'Cited answers that only use notes the caller can read, and agent tools that go through the guardrails.' },
+];
 ---
 
 <BaseLayout
@@ -87,6 +93,26 @@ const values = [
               <h3 class="mt-4 text-lg font-bold text-ink-900">{v.title}</h3>
               <p class="mt-2 font-light text-ink-500">{v.text}</p>
             </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="mt-20">
+      <p class="eyebrow">Open source</p>
+      <h2 class="mt-4 text-3xl font-bold text-ink-900 md:text-4xl">The trusted-agent stack</h2>
+      <p class="mt-4 max-w-3xl font-light text-ink-500">
+        We publish the building blocks we use to put AI agents into production with controls a
+        company can audit. Each answers one question a security or compliance team will ask.
+      </p>
+      <div class="mt-10 grid gap-6 sm:grid-cols-2">
+        {
+          stack.map((r) => (
+            <a href={`https://github.com/TimothyJAndrus/${r.name}`} class="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-colors hover:border-ink-900">
+              <p class="text-sm font-bold text-ember-600">{r.question}</p>
+              <h3 class="mt-3 font-mono text-lg font-bold text-ink-900">{r.name}</h3>
+              <p class="mt-2 font-light text-ink-500">{r.text}</p>
+            </a>
           ))
         }
       </div>
