@@ -58,6 +58,8 @@ The `.env` file had two canaries: a database password and a Stripe test key. The
 
 I left that row in the table instead of adding the pattern and rerunning. A governance tool you cannot audit is just a model with a different name, and the whole point of the exercise was to measure rather than to look clean. The fix is a regex per vendor key shape plus a generic high-entropy rule. It is next on the list, and it is in the README as a known gap until it ships.
 
+*Update, Nov 24: shipped. A `secret` kind now covers vendor key prefixes (Stripe, GitHub, GitLab, Slack, OpenAI, Hugging Face, and more) plus an assigned-secret rule for anything that looks like `KEY=<high-entropy>`. In the rerun, 0 of 2 secrets reached the provider across 27 requests, verified at the wire. The row above stays as it was measured.*
+
 ## The objection
 
 The fair pushback: these are open models, and frontier models behave better. Partly true. The stronger of the two models deleted fewer buckets. It still deleted the backups and rewrote the shared branch 3 times out of 3, and it still shipped every canary upstream. Better judgment lowers the rate of the first failure class. It does nothing for the second, because the second is not a judgment failure at all.
